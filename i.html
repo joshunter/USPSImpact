@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.9">
+    <meta name="theme-color">
+    <meta name="description" content="Illustrates the political implications of recent USPS changes.">
+    <meta name="keywords" content="USPS changes, result of post office policy changes, political impact usps.">
+    <title>USPS Impact</title>
+    <style>
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: local('Lato Regular'),local('Lato-Regular'),
+        url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjx4wXg.woff2) format('woff2');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,
+        U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+      }
+
+      * {
+        font-family: 'Lato', sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 140%;
+        width: 100%;
+      }
+
+      body {
+        display: inline-block;
+      }
+
+      button {
+        color: #3c3c3c;
+        background: none;
+        text-decoration: none;
+        border:none;
+        outline: 0;
+      }
+
+      .about {
+        font-size: 135%;
+        position: absolute;
+        right: 15%;
+        top: 8px;
+      }
+      .title {
+        font-size: 150%;
+        position: absolute;
+        left: 15%;
+      }
+
+      .container {
+        padding-top: 5%;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .map {
+        width: 80%;
+      }
+
+      .big {
+        width: 90%;
+        height: 22vw;
+      }
+
+      .small {
+        height: 19vw;
+        width: 26%;
+        padding: 2%;
+      }
+
+      #map {
+        width: 100%;
+        height: 40vw;
+      }
+
+      .piechart {
+        width: 100%;
+        height: 100%;
+      }
+
+      .swingStatesBarGraph {
+        width: 80%;
+      }
+
+      #swingStatesBarGraph {
+        width: 100%;
+        height: 800px;
+      }
+
+
+
+
+      span {
+        vertical-align: top;
+        display: inline-block;
+        width: calc(100%/5);
+      }
+
+
+      @media only screen and (max-width: 1024px){
+        #map {height: 60vw;} 
+        .map {width: 100%;}
+        .small {
+          height: 30vw;
+          width: 33%;
+          padding: 0%;
+        }
+        .swingStatesBarGraph {width: 90%;}
+        table {width: 90%;}
+      }
+      @media only screen and (max-width: 700px){
+        .small {
+          height: 70vw;
+          width: 80%;
+          padding: 3%;
+        }
+        .swingStatesBarGraph {width: 100%;}
+        table {width: 100%;}
+      }
+
+    </style>
+
+    <!-- Resources -->
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/usaLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/alLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/idLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/ksLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/maLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/miLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/nyLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/paLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/vaLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/sdLow.js"></script>
+    <script>
+      am4core.ready(function() {
+
+      // Themes begin
+      am4core.useTheme(am4themes_animated);
+      // Themes end
+
+       // Create map instance
+      var chart = am4core.create("map", am4maps.MapChart);
+      chart.chartContainer.wheelable = false;
+      // Set map definition
+      chart.geodata = am4geodata_usaLow;
+
+      // Set projection
+      chart.projection = new am4maps.projections.AlbersUsa();
+
+      var bluePattern = new am4core.LinePattern();
+      bluePattern.width = 7;
+      bluePattern.height = 7;
+      bluePattern.stroke = am4core.color("#1a80c4");
+      bluePattern.strokeWidth = 1;
+      bluePattern.rotation = -45;
+      bluePattern.backgroundFill = am4core.color("#005084");
+      bluePattern.backgroundOpacity = 1;
+
+      var redPattern = new am4core.LinePattern();
+      redPattern.width = 7;
+      redPattern.height = 7;
+      redPattern.stroke = am4core.color("#cc3d3d");
+      redPattern.strokeWidth = 1;
+      redPattern.rotation = -45;
+      redPattern.backgroundFill = am4core.color("#9D0000");
+      redPattern.backgroundOpacity = 1;
+
+      var legend = new am4charts.Legend();
+      legend.parent = chart.chartContainer;
+      legend.width = 500;
+      legend.align = "right";
+      legend.valign = "top";
+      legend.itemContainers.template.paddingTop = 2;
+      legend.data = [{
+        "name": "Dem. (2016)",
+        "fill":"#1a80c4"
+      }, {
+        "name": "Rep. (2016)",
+        "fill": "#cc3d3d"
+      }]
+
+      var countyLegend = new am4charts.Legend();
+      countyLegend.parent = chart.chartContainer;
+      countyLegend.width = 500;
+      countyLegend.align = "right";
+      countyLegend.valign = "top";
+      countyLegend.itemContainers.template.paddingTop = 30;
+      countyLegend.data = [
+       {
+        "name": "Flipped (2018)",
+        "fill": bluePattern
+      }, {
+        "name": "Flipped (2018)",
+        "fill": redPattern
+      }];
+
+      countyLegend.hide();
+
+
+
+      
+      // Create map polygon series
+      var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+      // Make map load polygon data (state shapes and names) from GeoJSON
+      polygonSeries.useGeodata = true;
+      polygonSeries.calculateVisualCenter = true;
+
+      polygonSeries.mapPolygons.template.adapter.add("fill", function(fill, target) {
+      if (target.dataItem) {
+          if (target.dataItem.value >= 0) {
+            return am4core.color("#1a80c4")
+          }
+          else {
+            return am4core.color("#cc3d3d");
+          }
+        }
+        return fill;
+      });
+
+
+      // Add State Labels
+      // var labelSeries = chart.series.push(new am4maps.MapImageSeries());
+      // var labelTemplate = labelSeries.mapImages.template.createChild(am4core.Label);
+      // labelTemplate.paddingRight = 12; 
+      // labelTemplate.horizontalCenter = "right";
+      // labelTemplate.verticalCenter = "middle";
+      // labelTemplate.fontSize = 12;
+      // labelTemplate.fill = am4core.color("#FFF");
+      // labelTemplate.nonScaling = true;
+      // labelTemplate.interactionsEnabled = false;
+      // // Lay over image
+      // polygonSeries.events.on("inited", function () {
+      //   polygonSeries.mapPolygons.each(function (polygon) {
+      //     var label = labelSeries.mapImages.create();
+      //     var state = polygon.dataItem.dataContext.id.split("-").pop();
+      //     label.latitude = polygon.visualLatitude;
+      //     label.longitude = polygon.visualLongitude;
+      //     label.children.getIndex(0).text = state;
+      //   });
+      // });
+
+      // Configure series tooltip
+      var polygonTemplate = polygonSeries.mapPolygons.template;
+      polygonTemplate.tooltipText = "{name}";
+      polygonTemplate.nonScalingStroke = true;
+      polygonTemplate.strokeWidth = 0.7;
+      polygonTemplate.stroke = am4core.color("#FFF");
+
+
+      var s = polygonTemplate.states.create("hover");
+      s.properties.opacity = 0.85;
+
+
+      // Set heatmap values for each state
+        polygonSeries.data = [
+        {id: "US-AL", value: -588708},
+        {id: "US-AK", value: -46933},
+        {id: "US-AZ", value: -91234},
+        {id: "US-AR", value: -304378},
+        {id: "US-CA", value: 4269978},
+        {id: "US-CO", value: 136386},
+        {id: "US-CT", value: 224357},
+        {id: "US-DE", value: 50476},
+        {id: "US-FL", value: -112911},
+        {id: "US-GA", value: -211141},
+        {id: "US-HI", value: 138044},
+        {id: "US-ID", value: -219290},
+        {id: "US-IL", value: 944714},
+        {id: "US-IN", value: -524160},
+        {id: "US-IA", value: -147314},
+        {id: "US-KS", value: -244013},
+        {id: "US-KY", value: -574117},
+        {id: "US-LA", value: -398484},
+        {id: "US-ME", value: 22142},
+        {id: "US-MD", value: 734759},
+        {id: "US-MA", value: 904303},
+        {id: "US-MI", value: -10704},
+        {id: "US-MN", value: 44593},
+        {id: "US-MS", value: -215583},
+        {id: "US-MO", value: -523443},
+        {id: "US-MT", value: -101531},
+        {id: "US-NE", value: -211467},
+        {id: "US-NV", value: 27202},
+        {id: "US-NH", value: 2736},
+        {id: "US-NJ", value: 546345},
+        {id: "US-NM", value: 65567},
+        {id: "US-NY", value: 1736590},
+        {id: "US-NC", value: -173315},
+        {id: "US-ND", value: -123036},
+        {id: "US-OH", value: -446841},
+        {id: "US-OK", value: -528761},
+        {id: "US-OR", value: 219703},
+        {id: "US-PA", value: -44292},
+        {id: "US-RI", value: 71982},
+        {id: "US-SC", value: -300016},
+        {id: "US-SD", value: -110263},
+        {id: "US-TN", value: -652230},
+        {id: "US-TX", value: -807179},
+        {id: "US-UT", value: -204555},
+        {id: "US-VT", value: 83204},
+        {id: "US-VA", value: 212030},
+        {id: "US-WA", value: 520971},
+        {id: "US-WV", value: -300577},
+        {id: "US-WI", value: -22748},
+        {id: "US-WY", value: -118446}
+        ]
+
+
+        mapData = [
+        {id: "US-AL", value: 10},
+        {id: "US-AK", value: 0},
+        {id: "US-AZ", value: 4},
+        {id: "US-AR", value: 5},
+        {id: "US-CA", value: 76},
+        {id: "US-CO", value: 6},
+        {id: "US-CT", value: 9},
+        {id: "US-DE", value: 6},
+        {id: "US-FL", value: 59},
+        {id: "US-GA", value: 11},
+        {id: "US-HI", value: 4},
+        {id: "US-ID", value: 1},
+        {id: "US-IL", value: 30},
+        {id: "US-IN", value: 13},
+        {id: "US-IA", value: 3},
+        {id: "US-KS", value: 1},
+        {id: "US-KY", value: 7},
+        {id: "US-LA", value: 10},
+        {id: "US-ME", value: 3},
+        {id: "US-MD", value: 4},
+        {id: "US-MA", value: 18},
+        {id: "US-MI", value: 26},
+        {id: "US-MN", value: 8},
+        {id: "US-MS", value: 7},
+        {id: "US-MO", value: 14},
+        {id: "US-MT", value: 1},
+        {id: "US-NE", value: 2},
+        {id: "US-NV", value: 4},
+        {id: "US-NH", value: 5},
+        {id: "US-NJ", value: 21},
+        {id: "US-NM", value: 1},
+        {id: "US-NY", value: 52},
+        {id: "US-NC", value: 15},
+        {id: "US-ND", value: 3},
+        {id: "US-OH", value: 34},
+        {id: "US-OK", value: 4},
+        {id: "US-OR", value: 6},
+        {id: "US-PA", value: 30},
+        {id: "US-RI", value: 4},
+        {id: "US-SC", value: 9},
+        {id: "US-SD", value: 4},
+        {id: "US-TN", value: 28},
+        {id: "US-TX", value: 58},
+        {id: "US-UT", value: 3},
+        {id: "US-VT", value: 1},
+        {id: "US-VA", value: 12},
+        {id: "US-WA", value: 8},
+        {id: "US-WV", value: 4},
+        {id: "US-WI", value: 12},
+        {id: "US-WY", value: 3}
+      ];
+
+
+
+      ///////// Circles
+      var imageSeries = chart.series.push(new am4maps.MapImageSeries());
+      imageSeries.useGeodata = true;
+
+      imageSeries.data = mapData;
+      imageSeries.dataFields.value = "value";
+
+      var imageTemplate = imageSeries.mapImages.template;
+      imageTemplate.nonScaling = true
+
+      var circle = imageTemplate.createChild(am4core.Circle);
+      circle.fillOpacity = 0.5;
+      circle.fill = am4core.color("#3c3c3c");
+      circle.tooltipText = "[bold]{value}[/] Removed";
+
+      imageTemplate.events.on("hit", function(ev) {clickEvent(ev);});
+
+
+      imageSeries.heatRules.push({
+        "target": circle,
+        "property": "radius",
+        "min": 0,
+        "max": 30,
+        "dataField": "value"
+      })
+
+      imageTemplate.adapter.add("latitude", function(latitude, target) {
+        var polygon = polygonSeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLatitude;
+         }
+         return latitude;
+      })
+
+      imageTemplate.adapter.add("longitude", function(longitude, target) {
+        var polygon = polygonSeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLongitude;
+         }
+         return longitude;
+      })
+
+
+
+      var label = imageTemplate.createChild(am4core.Label);
+      label.text = "{value}";
+      label.fill = am4core.color("#fff");
+      label.verticalCenter = "middle";
+      label.horizontalCenter = "middle";
+      // label.nonScaling = true;
+      /////////  END of Circles def
+
+      ///////// Counties
+      colorData = {
+        "01113": "1", "01091": "1", "01065": "1", "01011": "1", "01105": "1", "01131": "1",
+        "01085": "1", "01119": "1", "01063": "1", "01087": "1", "01047": "1", "01073": "1",
+        "01101": "1", "04005": "1", "04001": "1", "04019": "1", "04023": "1", "05119": "1",
+        "05069": "1", "05041": "1", "05017": "1", "05107": "1", "05077": "1", "05123": "1",
+        "05035": "1", "06001": "1", "06003": "1", "06013": "1", "06019": "1", "06023": "1",
+        "06025": "1", "06033": "1", "06037": "1", "06041": "1", "06045": "1", "06047": "1",
+        "06051": "1", "06053": "1", "06055": "1", "06057": "1", "06059": "1", "06065": "4",
+        "06067": "1", "06069": "1", "06071": "1", "06073": "1", "06075": "1", "06077": "1",
+        "06079": "1", "06081": "1", "06083": "1", "06085": "1", "06087": "1", "06095": "1",
+        "06097": "1", "06099": "1", "06111": "1", "06113": "1", "08107": "1", "08037": "1",
+        "08117": "1", "08019": "1", "08047": "1", "08059": "1", "08005": "1", "08001": "1",
+        "08031": "1", "08014": "1", "08013": "1", "08069": "1", "08065": "1", "08097": "1",
+        "08051": "1", "08109": "1", "08003": "1", "08023": "1", "08091": "1", "08113": "1",
+        "08111": "1", "08067": "1", "09003": "1", "09013": "1", "09011": "1", "09007": "1",
+        "09009": "1", "09001": "1", "10003": "1", "12073": "1", "12039": "1", "12001": "1",
+        "12095": "1", "12097": "1", "12057": "1", "12099": "1", "12011": "1", "12086": "1",
+        "13303": "1", "13061": "1", "13265": "1", "13033": "1", "13261": "1", "13009": "1",
+        "13301": "1", "13243": "1", "13037": "1", "13273": "1", "13259": "1", "13163": "1",
+        "13263": "1", "13217": "1", "13193": "1", "13141": "1", "13179": "1", "13151": "1",
+        "13097": "1", "13067": "1", "13247": "1", "13021": "1", "13215": "1", "13095": "1",
+        "13051": "1", "13059": "1", "13135": "1", "13245": "1", "13063": "1", "13121": "1",
+        "13089": "1", "15001": "1", "15003": "1", "15009": "1", "15005": "1", "17201": "1",
+        "17077": "1", "16057": "1", "17143": "1", "16013": "1", "17161": "1", "18105": "1",
+        "17019": "1", "17197": "1", "17089": "1", "17097": "1", "17043": "1", "18097": "1",
+        "17031": "1", "17037": "1", "17163": "1", "18089": "1", "18141": "1", "19163": "1",
+        "19013": "1", "19169": "1", "19113": "1", "21067": "1", "20209": "1", "20045": "1",
+        "19153": "1", "19103": "1", "21111": "1", "22107": "1", "22035": "1", "22065": "1",
+        "22091": "1", "22093": "1", "22047": "1", "22017": "1", "22071": "1", "24003": "1",
+        "24017": "1", "24027": "1", "24005": "1", "24510": "1", "24031": "1", "27075": "1",
+        "27017": "1", "27109": "1", "27031": "1", "26121": "1", "26103": "1", "27163": "1",
+        "27037": "1", "26077": "1", "26049": "1", "26065": "1", "26125": "1", "26161": "1",
+        "27123": "1", "27053": "1", "26163": "1", "25019": "1", "25007": "1", "25001": "1",
+        "25023": "4", "25005": "1", "25021": "1", "15007": "1", "25025": "1", "25009": "1",
+        "25017": "4", "25027": "4", "25013": "1", "25015": "1", "25011": "1", "25003": "1",
+        "23009": "1", "23027": "1", "23013": "1", "23015": "1", "23023": "1", "23005": "1",
+        "23031": "1", "27137": "1", "22033": "1", "22095": "1", "32031": "1", "32003": "1",
+        "28113": "1", "28055": "1", "30003": "1", "28105": "1", "30023": "1", "28061": "1",
+        "30031": "1", "28029": "1", "28163": "1", "28135": "1", "28069": "1", "28119": "1",
+        "28093": "1", "30035": "1", "28157": "1", "28025": "1", "28143": "1", "28001": "1",
+        "28053": "1", "29189": "1", "28103": "1", "28021": "1", "28133": "1", "28027": "1",
+        "28011": "1", "28083": "1", "29019": "1", "28051": "1", "28151": "1", "30063": "1",
+        "28049": "1", "29095": "1", "28125": "1", "30093": "1", "28065": "1", "31109": "1",
+        "35019": "1", "35006": "1", "35053": "1", "35033": "1", "35017": "1", "35043": "1",
+        "35028": "1", "34011": "1", "35047": "1", "31055": "1", "35039": "1", "35055": "1",
+        "34001": "1", "35031": "1", "35013": "1", "34035": "1", "34005": "1", "35049": "1",
+        "34031": "1", "35001": "1", "34003": "1", "34021": "1", "34023": "1", "34007": "1",
+        "34039": "1", "34017": "1", "34013": "1", "33017": "1", "33013": "1", "33009": "1",
+        "33005": "1", "37139": "1", "37189": "1", "36027": "1", "38085": "1", "36019": "1",
+        "38079": "1", "37187": "1", "37165": "1", "37007": "1", "36021": "1", "37093": "1",
+        "37195": "1", "37015": "1", "37131": "1", "37185": "1", "37091": "1", "37037": "1",
+        "36093": "1", "37181": "1", "37147": "1", "37083": "1", "37065": "1", "36087": "1",
+        "36111": "1", "37067": "1", "36109": "1", "37021": "1", "37051": "1", "36029": "1",
+        "36067": "1", "36001": "1", "36059": "1", "37135": "1", "37081": "1", "36055": "1",
+        "37063": "1", "37183": "1", "37119": "1", "36119": "1", "36005": "1", "36081": "1",
+        "36047": "1", "36061": "1", "39061": "1", "39009": "1", "39049": "1", "39035": "1",
+        "39153": "1", "39093": "1", "39095": "1", "39099": "1", "41007": "1", "41067": "1",
+        "41051": "1", "41005": "1", "41027": "1", "41041": "1", "41003": "1", "41039": "1",
+        "42045": "1", "42029": "1", "42091": "1", "42101": "1", "42017": "1", "42077": "1",
+        "42043": "1", "42089": "1", "42069": "1", "42027": "1", "42003": "1", "44007": "1",
+        "44001": "1", "44009": "1", "44005": "1", "46041": "1", "46017": "1", "46121": "1",
+        "46113": "1", "46027": "1", "47037": "1", "47075": "1", "47157": "1", "49035": "1",
+        "49043": "1", "56039": "1", "50019": "1", "50005": "1", "50011": "1", "50015": "1",
+        "50023": "1", "50017": "1", "50013": "1", "50007": "1", "50001": "1", "50027": "4",
+        "50021": "1", "50003": "1", "50025": "1", "48261": "1", "48109": "1", "45033": "1",
+        "51790": "1", "48389": "1", "48283": "1", "51750": "1", "45027": "1", "48273": "1",
+        "51840": "1", "51181": "1", "51147": "1", "51121": "1", "51131": "1", "48163": "1",
+        "51595": "1", "51678": "1", "45053": "1", "48377": "1", "51081": "1", "51183": "1",
+        "51670": "1", "51036": "1", "48505": "1", "48465": "1", "51620": "1", "48127": "1",
+        "48247": "1", "48249": "1", "48047": "1", "51690": "1", "51025": "1", "48131": "1",
+        "51685": "1", "45049": "1", "45069": "1", "45009": "1", "48489": "1", "48507": "1",
+        "45005": "1", "45061": "1", "51683": "1", "45039": "1", "51630": "1", "45067": "1",
+        "51830": "1", "51600": "1", "51590": "1", "51660": "1", "51610": "1", "45089": "1",
+        "51800": "1", "45085": "1", "48427": "1", "51770": "1", "48323": "1", "51730": "1",
+        "45019": "1", "51003": "1", "45075": "1", "51540": "1", "51740": "1", "48157": "1",
+        "51700": "1", "51650": "1", "48479": "1", "48061": "1", "51107": "1", "51087": "1",
+        "51710": "1", "51153": "1", "51510": "1", "45079": "1", "51760": "1", "48215": "1",
+        "51013": "1", "48029": "1", "48141": "1", "48201": "1", "48453": "1", "51059": "1",
+        "48113": "1", "53011": "1", "55045": "1", "55078": "1", "53075": "1", "55007": "1",
+        "55003": "1", "55097": "1", "55031": "1", "55049": "1", "53029": "1", "55035": "1",
+        "55063": "1", "53031": "1", "55105": "1", "53035": "1", "53073": "1", "53067": "1",
+        "53053": "1", "55025": "1", "55079": "1", "53033": "1", "02016": "2", "02105": "2",
+        "02240": "2", "02100": "2", "02100": "2", "02195": "2", "02195": "2", "02170": "2",
+        "02170": "2", "02050": "2", "02050": "2", "02122": "2", "02122": "2", "02020": "2",
+        "02020": "2", "02070": "2", "02070": "2", "02110": "2", "02110": "2", "02150": "2",
+        "02150": "2", "02220": "2", "02220": "2", "02261": "2", "02261": "2", "02013": "2",
+        "02013": "2", "02060": "2", "02060": "2", "02068": "2", "02068": "2", "02188": "2",
+        "02188": "2", "02230": "2", "02230": "2", "02275": "2", "02275": "2", "02185": "2",
+        "02185": "2", "02164": "2", "02164": "2", "02290": "2", "02290": "2", "02198": "2",
+        "02198": "2", "02180": "2", "02180": "2", "02158": "2", "02158": "2", "02282": "2",
+        "02282": "2", "02130": "2", "02130": "2", "02090": "2", "02090": "2", "02105": "2",
+        "02240": "2", "29510": "1", "05143": "3", "12031": "3", "12117": "3", "12103": "3",
+        "16001": "3", "20173": "3", "26081": "3", "36103": "3", "40109": "3", "42049": "3",
+        "46099": "3"
+        };
+      var countySeries = chart.series.push(new am4maps.MapPolygonSeries());
+      countySeries.hide();
+
+
+      var countyTemplate = countySeries.mapPolygons.template;
+      countyTemplate.tooltipText = "{name}";
+      countyTemplate.stroke = am4core.color("#3c3c3c");
+
+      countyTemplate.adapter.add("fill", function(fill, target) {
+      if (target.dataItem) {
+          if(target.dataItem.dataContext) {
+            if(colorData[target.dataItem.dataContext.id]==1){
+              return am4core.color("#1a80c4");
+            }
+            else if (colorData[target.dataItem.dataContext.id]==2){
+              return am4core.color("#e2e2e2");
+            }
+            else if (colorData[target.dataItem.dataContext.id]==3){
+              let bluePattern = new am4core.LinePattern();
+              bluePattern.width = 7;
+              bluePattern.height = 7;
+              bluePattern.stroke = am4core.color("#1a80c4");
+              bluePattern.strokeWidth = 1;
+              bluePattern.rotation = -45;
+              bluePattern.backgroundFill = am4core.color("#005084");
+              bluePattern.backgroundOpacity = 1;
+
+              return bluePattern;
+            }
+            else if (colorData[target.dataItem.dataContext.id]==4){
+              let redPattern = new am4core.LinePattern();
+              redPattern.width = 7;
+              redPattern.height = 7;
+              redPattern.stroke = am4core.color("#cc3d3d");
+              redPattern.strokeWidth = 1;
+              redPattern.rotation = -45;
+              redPattern.backgroundFill = am4core.color("#9D0000");
+              redPattern.backgroundOpacity = 1;
+
+              return redPattern;
+            }
+          return am4core.color("#cc3d3d");
+        }
+      }
+      });
+
+
+      // Create hover state and set alternative fill color
+      var hs = countyTemplate.states.create("hover");
+      hs.properties.opacity = 0.85;
+      // hs.properties.fill = am4core.color("#3c3c3c");
+
+      ///////// END of county series def /////////
+
+      ///////// Circles 2 Electric Boogaloo
+      smallCirclesData = [
+        {id:"01073", value: 5},{id:"01089", value: 1},{id:"01097", value: 1},{id:"01101", value: 3},{id: "05143", value: 1},
+        {id: "05119", value: 4},{id: "04013", value: 3},{id: "04019", value: 1},{id: "06029", value: 2},{id: "06037", value: 20},
+        {id: "06065", value: 5},{id: "06001", value: 4},{id: "06067", value: 9},{id: "06071", value: 1},{id: "06073", value: 4},
+        {id: "06075", value: 9},{id: "06085", value: 9},{id: "06059", value: 8},{id: "06083", value: 3},{id: "06097", value: 2},
+        {id: "08031", value: 6},{id: "09003", value: 7},{id: "09009", value: 2},{id: "11001", value: 3},{id: "10003", value: 6},
+        {id: "12071", value: 6},{id: "12001", value: 1},{id: "12031", value: 8},{id: "12015", value: 6},{id: "12086", value: 7},
+        {id: "12117", value: 5},{id: "12095", value: 7},{id: "12033", value: 2},{id: "12103", value: 2},{id: "12073", value: 2},
+        {id: "12057", value: 8},{id: "12099", value: 5},{id: "13121", value: 3},{id: "13245", value: 1},{id: "13135", value: 3},
+        {id: "13021", value: 2},{id: "13113", value: 2},{id: "15003", value: 4},{id: "19113", value: 1},{id: "19153", value: 2},
+        {id: "16001", value: 1},{id: "17031", value: 20},{id: "17043", value: 5},{id: "17019", value: 1},{id: "17161", value: 1},
+        {id: "17143", value: 2},{id: "17167", value: 1},{id: "18163", value: 2},{id: "18003", value: 3},{id: "18089", value: 2},
+        {id: "18097", value: 5},{id: "18141", value: 1},{id: "20173", value: 1},{id: "21067", value: 3},{id: "21111", value: 4},
+        {id: "22033", value: 2},{id: "22055", value: 1},{id: "22071", value: 5},{id: "22017", value: 2},{id: "25025", value: 9},
+        {id: "25023", value: 3},{id: "25017", value: 1},{id: "25027", value: 3},{id: "25013", value: 2},{id: "24005", value: 1},
+        {id: "24033", value: 1},{id: "24041", value: 1},{id: "24031", value: 1},{id: "23019", value: 1},{id: "23005", value: 2},
+        {id: "26163", value: 3},{id: "26081", value: 7},{id: "26065", value: 1},{id: "26125", value: 12},{id: "26055", value: 3},
+        {id: "27053", value: 5},{id: "27123", value: 3},{id: "29031", value: 1},{id: "29019", value: 1},{id: "29095", value: 4},
+        {id: "29189", value: 6},{id: "29077", value: 2},{id: "28043", value: 1},{id: "28047", value: 2},{id: "28035", value: 1},
+        {id: "28049", value: 3},{id: "30111", value: 1},{id: "37119", value: 5},{id: "37051", value: 4},{id: "37081", value: 3},
+        {id: "37183", value: 3},{id: "38017", value: 1},{id: "38101", value: 2},{id: "31055", value: 2},{id: "33011", value: 5},
+        {id: "34007", value: 7},{id: "34017", value: 7},{id: "34003", value: 3},{id: "34021", value: 4},{id: "35001", value: 1},
+        {id: "32003", value: 3},{id: "32031", value: 1},{id: "36001", value: 5},{id: "36047", value: 5},{id: "36029", value: 5},
+        {id: "36059", value: 2},{id: "36103", value: 4},{id: "36081", value: 10},{id: "36071", value: 1},{id: "36055", value: 5},
+        {id: "36067", value: 6},{id: "36119", value: 9},{id: "39061", value: 8},{id: "39035", value: 8},{id: "39049", value: 10},
+        {id: "39113", value: 3},{id: "39095", value: 3},{id: "39099", value: 2},{id: "40109", value: 2},{id: "40143", value: 2},
+        {id: "41039", value: 2},{id: "41051", value: 4},{id: "42013", value: 1},{id: "42049", value: 2},{id: "42043", value: 5},
+        {id: "42021", value: 1},{id: "42017", value: 4},{id: "42101", value: 10},{id: "42003", value: 4},{id: "42069", value: 3},
+        {id: "44007", value: 4},{id: "45019", value: 2},{id: "45079", value: 4},{id: "45045", value: 3},{id: "46005", value: 1},
+        {id: "46099", value: 3},{id: "47065", value: 5},{id: "47179", value: 2},{id: "47093", value: 5},{id: "47157", value: 8},
+        {id: "47037", value: 8},{id: "48441", value: 1},{id: "48375", value: 1},{id: "48453", value: 6},{id: "48245", value: 2},
+        {id: "48113", value: 12},{id: "48355", value: 1},{id: "48141", value: 2},{id: "48439", value: 8},{id: "48201", value: 14},
+        {id: "48303", value: 1},{id: "48215", value: 1},{id: "48329", value: 1},{id: "48029", value: 8},{id: "49035", value: 3},
+        {id: "51107", value: 2},{id: "51059", value: 1},{id: "51710", value: 2},{id: "51159", value: 4},{id: "51770", value: 3},
+        {id: "50027", value: 1},{id: "53033", value: 5},{id: "53063", value: 2},{id: "53053", value: 1},{id: "55009", value: 2},
+        {id: "55025", value: 3},{id: "55079", value: 6},{id: "55073", value: 1},{id: "54039", value: 4},{id: "56025", value: 1},
+        {id: "56037", value: 2}];
+
+      var smallCircleSeries = chart.series.push(new am4maps.MapImageSeries());
+      smallCircleSeries.useGeodata = true;
+
+      smallCircleSeries.data = smallCirclesData;
+      smallCircleSeries.dataFields.value = "value";
+
+
+
+      var smallCircleTemplate = smallCircleSeries.mapImages.template;
+      smallCircleTemplate.nonScaling = true
+
+      smallCircleTemplate.fill = chart.colors.getIndex(0);
+
+      var smallCircle = smallCircleTemplate.createChild(am4core.Circle);
+
+      smallCircle.fillOpacity = 0;
+      smallCircle.tooltipText = "[bold]{value}[/] Removed";
+
+
+      // smallCircleSeries.heatRules.push({
+      //   "target": smallCircle,
+      //   "property": "radius",
+      //   "min": 0,
+      //   "max": 20,
+      //   "dataField": "value"
+      // })
+
+      smallCircleSeries.hide();
+
+      smallCircleTemplate.adapter.add("latitude", function(latitude, target) {
+        var polygon = countySeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLatitude;
+         }
+         return latitude;
+      })
+
+      smallCircleTemplate.adapter.add("longitude", function(longitude, target) {
+        var polygon = countySeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLongitude;
+         }
+         return longitude;
+      })
+
+      var label = smallCircleTemplate.createChild(am4core.Label);
+      label.text = "{value}";
+      label.fill = am4core.color("#FFF");
+      label.verticalCenter = "middle";
+      label.horizontalCenter = "middle";
+
+
+      /////////  END of Circles2 def
+
+      var restoreContinents = function(){
+        chart.goHome();
+        polygonSeries.show();
+        imageSeries.show();
+        countySeries.hide();
+        smallCircleSeries.hide();
+        homeButton.hide();
+        countyLegend.hide();
+      };
+
+      // Zoom control
+      chart.zoomControl = new am4maps.ZoomControl();
+      chart.zoomControl.align = "left";
+      chart.zoomControl.valign = "top";
+
+      var homeButton = new am4core.Button();
+
+      homeButton.events.on("hit", restoreContinents);
+
+      homeButton.icon = new am4core.Sprite();
+      homeButton.padding(7, 5, 7, 5);
+      homeButton.width = 30;
+      homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+      homeButton.marginTop = 5;
+      homeButton.parent = chart.zoomControl;
+      // homeButton.insertBefore(chart.zoomControl.plusButton);
+      homeButton.hide();
+
+
+      function clickEvent(ev) {
+        let c = ev.target.series.chart;
+        c.zoomToMapObject(ev.target);
+        // console.log(ev.target.dataItem.dataContext);
+        homeButton.show();
+
+        switch(ev.target.dataItem.dataContext.id){
+          // case "US-AL": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/alLow.json";countySeries.geodataSource.load(); break;
+          case "US-AL": countySeries.geodata = am4geodata_region_usa_alLow; break;
+          case "US-AK": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/akLow.json";countySeries.geodataSource.load(); break;
+          case "US-AZ": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/azLow.json";countySeries.geodataSource.load(); break;
+          case "US-AR": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/arLow.json";countySeries.geodataSource.load(); break;
+          case "US-CA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/caLow.json";countySeries.geodataSource.load(); break;
+          case "US-CO": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/coLow.json";countySeries.geodataSource.load(); break;
+          case "US-CT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ctLow.json";countySeries.geodataSource.load(); break;
+          case "US-DE": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/deLow.json";countySeries.geodataSource.load(); break;
+          case "US-FL": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/flLow.json";countySeries.geodataSource.load(); break;
+          case "US-GA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/gaLow.json";countySeries.geodataSource.load(); break;
+          case "US-HI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/hiLow.json";countySeries.geodataSource.load(); break;
+          // case "US-ID": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/idLow.json";countySeries.geodataSource.load(); break;
+          case "US-ID": countySeries.geodata = am4geodata_region_usa_idLow; break;
+          case "US-IL": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ilLow.json";countySeries.geodataSource.load(); break;
+          case "US-IN": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/inLow.json";countySeries.geodataSource.load(); break;
+          case "US-IA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/iaLow.json";countySeries.geodataSource.load(); break;
+          // case "US-KS": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ksLow.json";countySeries.geodataSource.load(); break;
+          case "US-KS": countySeries.geodata = am4geodata_region_usa_ksLow; break;
+          case "US-KY": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/kyLow.json";countySeries.geodataSource.load(); break;
+          case "US-LA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/laLow.json";countySeries.geodataSource.load(); break;
+          case "US-ME": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/meLow.json";countySeries.geodataSource.load(); break;
+          case "US-MD": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/mdLow.json";countySeries.geodataSource.load(); break;
+          // case "US-MA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/maLow.json";countySeries.geodataSource.load(); break;
+          case "US-MA": countySeries.geodata = am4geodata_region_usa_maLow; break;
+          // case "US-MI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/miLow.json";countySeries.geodataSource.load(); break;
+          case "US-MI": countySeries.geodata = am4geodata_region_usa_miLow; break;
+          case "US-MN": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/mnLow.json";countySeries.geodataSource.load(); break;
+          case "US-MS": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/msLow.json";countySeries.geodataSource.load(); break;
+          case "US-MO": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/moLow.json";countySeries.geodataSource.load(); break;
+          case "US-MT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/mtLow.json";countySeries.geodataSource.load(); break;
+          case "US-NE": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/neLow.json";countySeries.geodataSource.load(); break;
+          case "US-NV": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nvLow.json";countySeries.geodataSource.load(); break;
+          case "US-NH": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nhLow.json";countySeries.geodataSource.load(); break;
+          case "US-NJ": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/njLow.json";countySeries.geodataSource.load(); break;
+          case "US-NM": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nmLow.json";countySeries.geodataSource.load(); break;
+          // case "US-NY": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nyLow.json";countySeries.geodataSource.load(); break;
+          case "US-NY": countySeries.geodata = am4geodata_region_usa_nyLow; break;
+          case "US-NC": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ncLow.json";countySeries.geodataSource.load(); break;
+          case "US-ND": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ndLow.json";countySeries.geodataSource.load(); break;
+          case "US-OH": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ohLow.json";countySeries.geodataSource.load(); break;
+          case "US-OK": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/okLow.json";countySeries.geodataSource.load(); break;
+          case "US-OR": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/orLow.json";countySeries.geodataSource.load(); break;
+          // case "US-PA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/paLow.json";countySeries.geodataSource.load(); break;
+          case "US-PA": countySeries.geodata = am4geodata_region_usa_paLow; break;
+          case "US-RI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/riLow.json";countySeries.geodataSource.load(); break;
+          case "US-SC": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/scLow.json";countySeries.geodataSource.load(); break;
+          // case "US-SD": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/sdLow.json";countySeries.geodataSource.load(); break;
+          case "US-SD": countySeries.geodata = am4geodata_region_usa_sdLow; break;
+          case "US-TN": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/tnLow.json";countySeries.geodataSource.load(); break;
+          case "US-TX": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/txLow.json";countySeries.geodataSource.load(); break;
+          case "US-UT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/utLow.json";countySeries.geodataSource.load(); break;
+          case "US-VT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/vtLow.json";countySeries.geodataSource.load(); break;
+          // case "US-VA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/vaLow.json";countySeries.geodataSource.load(); break;
+          case "US-VA": countySeries.geodata = am4geodata_region_usa_vaLow; break;
+          case "US-WA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/waLow.json";countySeries.geodataSource.load(); break;
+          case "US-WV": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/wvLow.json";countySeries.geodataSource.load(); break;
+          case "US-WI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/wiLow.json";countySeries.geodataSource.load(); break;
+          case "US-WY": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/wyLow.json";countySeries.geodataSource.load(); break;
+          default: countySeries.hide(); break;
+        }
+
+        polygonSeries.hide();
+        imageSeries.hide();
+        countySeries.show();
+        smallCircleSeries.show();
+        countyLegend.show();
+        countySeries.useGeodata = true;
+        countySeries.calculateVisualCenter = true;
+
+      }
+
+      // Click event for states
+      polygonSeries.mapPolygons.template.events.on("hit", function(ev) {clickEvent(ev);});
+
+
+      countySeries.mapPolygons.template.events.on("hit", function(ev) {
+        console.log(ev.target.dataItem.dataContext.id);
+      });
+
+      // chart.seriesContainer.draggable = false;
+
+      }); // end am4core.ready()
+
+
+      // Counties Impacted PIE 1
+      am4core.ready(function() {
+        var selected;
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var pieChart1 = am4core.create("piechartdiv", am4charts.PieChart);
+        pieChart1.responsive.enabled = true;
+
+        // Add data
+        pieChart1Data = [
+        {
+          type: "Republican",
+          value: 55,
+          color: am4core.color("#cc3d3d"),
+          subs: [{
+            type: "Republican (2016)",
+            value: 50
+          },
+          {
+            type: "Republican (2018)",
+            value: 5
+          }]
+        },{
+          type: "Democrat",
+          value: 137,
+          color: am4core.color("#1a80c4"),
+          subs: [{
+            type: "Democrat (2018)",
+            value: 11
+          },{
+            type: "Democrat (2016)",
+            value: 126
+          }]
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = pieChart1.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "type";
+        pieSeries.slices.template.propertyFields.isActive = "pulled";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // pieSeries.labels.minGridDistance = 0.1;
+
+        // Configure labels
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+        pieSeries.slices.template.propertyFields.fill = "color";
+
+        pieChart1.data = generateChartData(pieChart1Data);
+
+        function generateChartData(types) {
+          var chartData = [];
+          for (var i = 0; i < types.length; i++) {
+            if (i == selected) {
+              for (var x = 0; x < types[i].subs.length; x++) {
+                chartData.push({
+                  type: types[i].subs[x].type,
+                  value: types[i].subs[x].value,
+                  color: types[i].color,
+                  pulled: true
+                });
+              }
+            } else {
+              chartData.push({
+                type: types[i].type,
+                value: types[i].value,
+                color: types[i].color,
+                id: i
+              });
+            }
+          }
+          return chartData;
+        }
+
+        pieSeries.slices.template.events.on("hit", function(event) {
+          if (event.target.dataItem.dataContext.id != undefined) {
+            selected = event.target.dataItem.dataContext.id;
+          } else {
+            selected = undefined;
+          }
+          pieChart1.data = generateChartData(pieChart1Data);
+        });
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+      }); // end am4core.ready()
+
+
+      // Votes Impacted PIE 2
+      am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("piechartdiv2", am4charts.PieChart);
+        // chart.interactionsEnabled = false;
+
+        // Add data
+        chart.data = [
+        {
+          "Voted": "Trump (2016)",
+          "percent": 19889629
+        },
+        {
+          "Voted": "Clinton (2016)",
+          "percent": 32758496
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "percent";
+        pieSeries.dataFields.category = "Voted";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+        pieSeries.slices.template.inert = true;
+
+
+        pieSeries.colors.list = [
+          am4core.color("#cc3d3d"),
+          am4core.color("#1a80c4")
+        ];
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+      }); // end am4core.ready()
+
+      // USPS Sorting Machines PIE 3
+      am4core.ready(function() {
+        var selected;
+
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("piechartdiv3", am4charts.PieChart);
+        chart.responsive.enabled = true;
+
+        // chart.legend = new am4charts.Legend()
+        // chart.legend.useDefaultMarker = true;
+        // chart.legend.markers.template.children.getIndex(0).cornerRadius(12, 12, 12, 12);
+        // chart.legend.position = 'bottom'
+        // chart.legend.paddingBottom = 20
+        // chart.legend.labels.template.width = 500
+
+        // Add data
+        chartData = [
+        {
+          type: "Republican",
+          value: 159,
+          color: am4core.color("#cc3d3d"),
+          subs: [{
+            type: "Republican (2016)",
+            value: 146
+          },
+          {
+            type: "Republican (2018)",
+            value: 13
+          }]
+        },{
+          type: "Democrat",
+          value: 552,
+          color: am4core.color("#1a80c4"),
+          subs: [{
+            type: "Democrat (2018)",
+            value: 36
+          },{
+            type: "Democrat (2016)",
+            value: 516
+          }]
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "type";
+        pieSeries.slices.template.propertyFields.isActive = "pulled";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // pieSeries.labels.minGridDistance = 0.1;
+        // pieSeries.legendSettings.labelText = "{label}";
+        pieSeries.legendSettings.valueText = "{value.percent.formatNumber('#.0')}%";
+
+        // Configure labels
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        pieSeries.labels.template.text = "{value}";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+        pieSeries.slices.template.propertyFields.fill = "color";
+
+        chart.data = generateChartData(chartData);
+
+        function generateChartData(types) {
+          var chartData = [];
+          for (var i = 0; i < types.length; i++) {
+            if (i == selected) {
+              for (var x = 0; x < types[i].subs.length; x++) {
+                chartData.push({
+                  type: types[i].subs[x].type,
+                  value: types[i].subs[x].value,
+                  color: types[i].color,
+                  pulled: true
+                });
+              }
+            } else {
+              chartData.push({
+                type: types[i].type,
+                value: types[i].value,
+                color: types[i].color,
+                id: i
+              });
+            }
+          }
+          return chartData;
+        }
+
+        pieSeries.slices.template.events.on("hit", function(event) {
+          if (event.target.dataItem.dataContext.id != undefined) {
+            selected = event.target.dataItem.dataContext.id;
+          } else {
+            selected = undefined;
+          }
+          chart.data = generateChartData(chartData);
+        });
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+      }); // end am4core.ready()
+
+
+      am4core.ready(function() {
+
+        // Create chart instance
+        var swingStatesChart = am4core.create("swingStatesBarGraph", am4charts.XYChart);
+
+        swingStatesChart.legend = new am4charts.Legend()
+        swingStatesChart.legend.position = 'top'
+        swingStatesChart.legend.paddingBottom = 20
+        swingStatesChart.legend.labels.template.maxWidth = 150
+
+        // Add data
+        swingStatesChart.data = [
+          {"state": "Florida","rep": 14, "dem": 30, "dem18": 15},
+          {"state": "Ohio","rep": 3,"dem": 31},
+          {"state": "Pennsylvania","rep": 2,"dem": 26, "dem18": 2},
+          {"state": "Michigan","rep": 3,"dem": 16, "dem18": 7},
+          {"state": "North Carolina","rep": 0,"dem": 15},
+          {"state": "Virginia","rep": 7,"dem": 5},
+          {"state": "Wisconsin","rep": 3,"dem": 9},
+          {"state": "Minnesota","rep": 0,"dem": 8},
+          {"state": "Colorado","rep": 0,"dem": 6},
+          {"state": "New Hampshire","rep": 5},
+          {"state": "Nevada","rep": 0,"dem": 4},
+          {"state": "Iowa","rep": 0,"dem": 3},
+        ];
+
+
+        // // Create axes
+        var xAxis = swingStatesChart.xAxes.push(new am4charts.CategoryAxis())
+        xAxis.dataFields.category = 'state'
+        xAxis.renderer.cellStartLocation = 0.1
+        xAxis.renderer.cellEndLocation = 0.9
+        xAxis.renderer.grid.template.location = 0;
+        xAxis.renderer.minGridDistance = 0;
+
+        xAxis.renderer.labels.template.verticalCenter = "left"
+        xAxis.renderer.labels.template.horizontalCenter = "right"
+        xAxis.renderer.labels.template.rotation = -45;
+
+
+
+        var yAxis = swingStatesChart.yAxes.push(new am4charts.ValueAxis());
+        yAxis.title.text = "USPS Sorting Machines Scheduled for Removal";
+        yAxis.min = 0;
+
+        // Create series
+        function createSeries(field, name, color) {
+          var series = swingStatesChart.series.push(new am4charts.ColumnSeries());
+          series.dataFields.valueY = field;
+          series.dataFields.categoryX = "state";
+          series.name = name;
+          series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+          series.columns.template.height = am4core.percent(100);
+          series.columns.template.stroke = am4core.color("#FFF");
+          series.columns.template.strokeWidth = 1;
+          series.columns.template.strokeOpacity = 1;
+          series.columns.template.fill = color;
+          series.sequencedInterpolation = true;
+
+
+          series.stacked = true;
+
+          var valueLabel = series.bullets.push(new am4charts.LabelBullet());
+          valueLabel.label.text = "{valueY}";
+          valueLabel.label.dy = 10;
+          valueLabel.label.hideOversized = false;
+          valueLabel.label.truncate = false;
+          valueLabel.label.fill = am4core.color("#fff");
+
+        }
+
+        var bluePattern = new am4core.LinePattern();
+        bluePattern.width = 7;
+        bluePattern.height = 7;
+        bluePattern.stroke = am4core.color("#1a80c4");
+        bluePattern.strokeWidth = 1;
+        bluePattern.rotation = -45;
+        bluePattern.backgroundFill = am4core.color("#005084");
+        bluePattern.backgroundOpacity = 1;
+
+        var redPattern = new am4core.LinePattern();
+        redPattern.width = 7;
+        redPattern.height = 7;
+        redPattern.stroke = am4core.color("#cc3d3d");
+        redPattern.strokeWidth = 1;
+        redPattern.rotation = -45;
+        redPattern.backgroundFill = am4core.color("#9D0000");
+        redPattern.backgroundOpacity = 1;
+
+        createSeries("rep18", "Flipped (2018)", redPattern);
+        createSeries("rep", "Republican", am4core.color("#cc3d3d"));
+        createSeries("dem18", "Flipped (2018)", bluePattern);
+        createSeries("dem", "Democrat", am4core.color("#1a80c4"));
+
+
+        // xAxis.events.on("sizechanged", function(ev) {
+        //   // console.log(ev.target);
+        // var axis = ev.target;
+        //   var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+        //   if (cellWidth < axis.renderer.labels.template.maxWidth) {
+        //     axis.renderer.labels.template.rotation = -45;
+        //     axis.renderer.labels.template.horizontalCenter = "right";
+        //     axis.renderer.labels.template.verticalCenter = "middle";
+        //   }
+        //   else {
+        //     axis.renderer.labels.template.rotation = 0;
+        //     axis.renderer.labels.template.horizontalCenter = "middle";
+        //     axis.renderer.labels.template.verticalCenter = "top";
+        //   }
+        // });
+      }); // end am4core.ready()
+
+    </script>
+  </head>
+  <body>
+    <header><button class="title">USPS impact</button>
+    <button class="about" onclick="location.href='about.html';">about</button>
+    </header>
+    <section class="container map">
+      <h1>USPS Sorting Machines Scheduled For Removal 2020</h1> 
+      <div id="map" class=""></div>
+    </section>
+
+    <section class="container big">
+      <span class="container small">
+        <h1 style="font-weight: lighter;">Counties Impacted</h1>
+        <div class="piechart" id="piechartdiv"></div>
+      </span>
+      <span class="container small">
+        <h1 style="font-weight: lighter;">Votes Impacted</h1>
+        <div class="piechart" id="piechartdiv2"></div>
+      </span>
+      <span class="container small">
+        <h1 style="font-weight: lighter;">USPS Sorting Machines Impacted</h1>
+        <div class="piechart" id="piechartdiv3"></div>
+      </span>
+    </section>
+
+    <br>
+
+    <section class="container swingStatesBarGraph">
+      <h1>Traditional Swing States Potentially Impacted</h1>
+      <div id="swingStatesBarGraph"></div>
+    </section>
+
+    
+
+
+
+    </section>
+
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

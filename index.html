@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.9">
+    <meta name="theme-color" content="#FFF">
+    <meta name="description" content="Interactive site illustrating the USPS changes across the United States.">
+    <meta name="keywords" content="USPS changes, result of post office policy changes, political impact usps 2020.">
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+    <link rel="canonical" href="https://uspsimpact2020.com/" />
+    <meta property="og:url" content="//uspsimpact2020.com/">
+    <meta property="og:type" content="Informative">
+    <meta property="og:title" content="Political implications of USPS policy changes">
+    <meta property="og:description" content="Interactive site illustrating the USPS changes across the United States.">
+    <meta property="og:image" content="https://uspsimpact2020.com/usMap.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="//uspsimpact2020.com">
+    <meta name="twitter:title" content="Political implications of USPS policy changes">
+    <meta name="twitter:description" content="Interactive site illustrating the USPS changes across the United States.">
+    <meta name="twitter:image" content="https://uspsimpact2020.com/usMap.png">
+    <title>USPS Impact</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-177862315-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-177862315-1');
+    </script>
+    <style>
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: local('Lato Regular'),local('Lato-Regular'),
+        url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjx4wXg.woff2) format('woff2');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,
+        U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+      }
+
+      * {
+        font-family: 'Lato', sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 120%;
+        width: 100%;
+      }
+
+      body {
+        display: inline-block;
+      }
+
+      button {
+        color: #3c3c3c;
+        background: none;
+        text-decoration: none;
+        border:none;
+        outline: 0;
+      }
+
+
+      .container {
+        padding-top: 5%;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .map {
+        width: 80%;
+        padding: 70px 0 0 0;
+      }
+
+      .big {
+        width: 90%;
+        height: 22vw;
+      }
+
+      .small {
+        height: 19vw;
+        width: 26%;
+        padding: 2%;
+      }
+
+      .legend {
+        height: 130px;
+      }
+
+      #map {
+        width: 100%;
+        height: 40vw;
+      }
+
+      .swingStatesBarGraph {
+        width: 80%;
+      }
+      .hide {display: none;}
+
+
+      #swingStatesBarGraph {
+        width: 100%;
+        height: 90vh;
+      }
+
+      table {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+        width: 80%;
+      }
+
+      td{
+        color: #fff;
+      }
+
+      th{
+        font-weight: lighter;
+        color: #3c3c3c;
+      }
+
+      td, th {
+        text-align: center;
+        padding: 8px;
+      }
+
+      tr{
+        border: 1px solid #e2e2e2;
+      }
+
+      tr:hover{
+        opacity: 85%;
+      }
+
+      .table {
+        padding: 1%;
+        margin-bottom: 3%;
+        width: 80%;
+        text-align: center;
+        border: 1px solid #e2e2e2;
+        box-shadow: 3px 3px 7px -3px rgba(0, 0, 0, 0.15);
+        border-radius: 5px;
+      }
+
+      .tableHeader{
+        font-weight: bolder;
+      }
+
+      .collapsible {
+        background-color: transparent;
+        cursor: pointer;
+        width: 100%;
+        border: none;
+        outline: none;
+        border-top-right-radius: 9px;
+        border-top-left-radius: 9px;
+      }
+
+      /*.collapsible:nth-child(even) {
+        background-color: #eaeaea;
+      }*/
+
+      .collapsible:hover {
+        background-color: #fafafa;
+      }
+
+      .content {
+        overflow: hidden;
+        height: 0;
+        vertical-align: top;
+        color: #fff;
+        transition-property: height;
+        transition-duration: 1s;
+        box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 0.15), 
+        0 3px 7px -3px rgba(0, 0, 0, 0.15), 0 3px 7px -3px  rgba(0, 0, 0, 0.15);
+        border-bottom-right-radius: 9px;
+        border-bottom-left-radius: 9px;
+      }
+
+      .show {
+        height: auto;
+        transition-property: height;
+        transition-duration: 1s;
+      }
+
+      .active {
+        background-color: #eaeaea;
+      }
+
+      .stateEl {
+        color: #3c3c3c;
+        font-size: 17px;
+        width: calc(96%/6);
+      }
+
+      .demPercent{
+        color: #fff;
+        background: linear-gradient(90deg, transparent -50%, #1a80c4 50%, transparent 150%); 
+        /*background: #1a80c4;*/
+      }
+
+      .repPercent{
+        color: #fff;
+        background: linear-gradient(90deg, transparent -50%, #cc3d3d 50%, transparent 150%); 
+        /*background: #cc3d3d;*/
+      }
+
+      .stateRow {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        width: 100%;
+        border: 1px solid #fff;
+      }
+
+      span {
+        display: inline-block;
+        width: calc(100%/5);
+      }
+
+      .piechart {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      /*tr:nth-child(even) {
+        background-color: #;
+      }*/
+
+
+      .title {
+        position: relative;
+        top: -12px;
+        font-size: 150%;
+        margin: auto;
+        z-index: 1;
+      }
+
+      .title:hover {
+        cursor: pointer;
+      }
+
+      .sticky {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 60px;
+        width: 100vw;
+        z-index: 2;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+        box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 0.15);
+      }
+
+      /*Hamburger Menu*/
+      #menuToggle
+      {
+        display: block;
+        position: relative;
+        top: 20px;
+        left: 30px;        
+        width: 40px;
+        z-index: 2;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      #menuToggle a
+      {
+        text-decoration: none;
+        color: #232323;
+        transition: color 0.3s ease;
+      }
+
+      #menuToggle a:hover
+      {
+        color: #0CC49B;
+      }
+
+
+      #menuToggle input
+      {
+        display: block;
+        width: 40px;
+        height: 32px;
+        position: absolute;
+        top: -7px;
+        left: -5px;
+        
+        cursor: pointer;
+        
+        opacity: 0; /* hide this */
+        z-index: 2; /* and place it over the hamburger */
+        
+        -webkit-touch-callout: none;
+      }
+
+      #menuToggle span
+      {
+        display: block;
+        width: 33px;
+        height: 4px;
+        margin-bottom: 5px;
+        position: relative;
+        
+        background: #cdcdcd;
+        border-radius: 3px;
+        
+        z-index: 1;
+        
+        transform-origin: 4px 0px;
+        
+        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                    background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                    opacity 0.55s ease;
+      }
+
+      #menuToggle span:first-child
+      {
+        transform-origin: 0% 0%;
+      }
+
+      #menuToggle span:nth-last-child(2)
+      {
+        transform-origin: 0% 100%;
+      }
+
+      /* 
+       * Transform all the slices of hamburger
+       * into an X.
+       */
+      #menuToggle input:checked ~ span
+      {
+        opacity: 1;
+        transform: rotate(45deg) translate(-2px, -1px);
+        background: #232323;
+      }
+
+      /*
+       * Hide the middle one.
+       */
+      #menuToggle input:checked ~ span:nth-last-child(3)
+      {
+        opacity: 0;
+        transform: rotate(0deg) scale(0.2, 0.2);
+      }
+
+      /*
+       * Ohyeah and the last one should go the other direction
+       */
+      #menuToggle input:checked ~ span:nth-last-child(2)
+      {
+        transform: rotate(-45deg) translate(0, -1px);
+      }
+
+      /*
+       * Make this absolute positioned
+       * at the top left of the screen
+       */
+      #menu
+      {
+        position: absolute;
+        width: 300px;
+        height: 100vh;
+        margin: -100px 0 0 -50px;
+        padding: 25px;
+        padding-top: 125px;
+        
+        /*background: #ededed;*/
+        background: #e2e2e2;
+        list-style-type: none;
+        -webkit-font-smoothing: antialiased;
+        /* to stop flickering of text in safari */
+        
+        transform-origin: 0% 0%;
+        transform: translate(-100%, 0);
+        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+      }
+
+      #menu li
+      {
+        padding: 10px 0;
+        font-size: 22px;
+      }
+
+      /*
+       * And let's slide it in from the left
+       */
+      #menuToggle input:checked ~ ul
+      {
+        transform: none;
+      }
+
+      a {
+        font-size: 19px;
+        text-decoration: none;
+        color: #3c3c3c;
+      }
+
+      a:hover
+      {
+        color: #0CC49B;
+      }
+      #support {
+        position: absolute;
+        font-size: 17px;
+        top: 17px;
+        right: 5vw;
+        z-index: 1;
+        background: #0099FF;
+        color: #FFF;
+        border-radius: 25px;
+        padding: 3px 12px 3px 12px;
+        border: 1px solid #0086E0 ;
+        box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.15);
+      }
+
+      #support:hover {
+        box-shadow: 0px 0px 5px 1px #0CC49B;
+      }
+
+      #support:active {
+        border: 1px solid #0CC49B;
+        box-shadow: none;
+      }
+
+
+      ::-moz-selection { /* Code for Firefox */
+        color: white;
+        background: #2DE8BE;
+      }
+
+      ::selection {
+        color: white;
+        background: #2DE8BE;
+      }
+
+      .tooltip span {
+        position: relative;
+        display: inline-block;
+      }
+
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 100px;
+        font-size: 60%;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: -110%;
+        left: 67%;
+        margin-left: -75px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .tooltip {
+        top: 20px;
+        width: auto;
+      }
+
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        /*cursor: pointer;*/
+      }
+
+      @media only screen and (max-width: 1024px){
+        #map {height: 60vw;} 
+        .map {width: 100%;}
+        .small {
+          height: 30vw;
+          width: 33%;
+          padding: 0%;
+        }
+        .swingStatesBarGraph {width: 90%;}
+        .table {width: 90%;}
+        .stateEl {font-size: 15.5px;width: calc(96%/6);}
+        span {font-size: 15.5px;width: calc(100%/5);}
+      }
+      @media only screen and (max-width: 700px){
+        .small {
+          height: 70vw;
+          width: 80%;
+          padding: 3%;
+        }
+        .swingStatesBarGraph {width: 100%;}
+        .hide {display: none;}
+        .stateEl {width: calc(96%/4);font-size: 14px;}
+        table {width: 100%;}
+        span {font-size: 14px;width: calc(100%/3);}
+      }
+
+    </style>
+
+    <!-- Resources -->
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/usaLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <!--
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/alLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/idLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/ksLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/maLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/miLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/nyLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/paLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/vaLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/region/usa/sdLow.js"></script>
+    -->
+    <script>
+      am4core.ready(function() {
+
+      // Themes begin
+      am4core.useTheme(am4themes_animated);
+      // Themes end
+
+       // Create map instance
+      var chart = am4core.create("map", am4maps.MapChart);
+      chart.chartContainer.wheelable = false;
+      // Set map definition
+      chart.geodata = am4geodata_usaLow;
+
+      // Set projection
+      chart.projection = new am4maps.projections.AlbersUsa();
+
+      var bluePattern = new am4core.LinePattern();
+      bluePattern.width = 7;
+      bluePattern.height = 7;
+      bluePattern.stroke = am4core.color("#1a80c4");
+      bluePattern.strokeWidth = 1;
+      bluePattern.rotation = -45;
+      bluePattern.backgroundFill = am4core.color("#005084");
+      bluePattern.backgroundOpacity = 1;
+
+      var redPattern = new am4core.LinePattern();
+      redPattern.width = 7;
+      redPattern.height = 7;
+      redPattern.stroke = am4core.color("#cc3d3d");
+      redPattern.strokeWidth = 1;
+      redPattern.rotation = -45;
+      redPattern.backgroundFill = am4core.color("#9D0000");
+      redPattern.backgroundOpacity = 1;
+
+      var legend = new am4charts.Legend();
+      legend.parent = chart.chartContainer;
+      legend.width = 505;
+      legend.align = "right";
+      legend.valign = "top";
+      legend.itemContainers.template.paddingTop = 2;
+
+      legend.labels.template.textDecoration = "none";
+      legend.valueLabels.template.textDecoration = "none";
+      
+      var marker = legend.markers.template.children.getIndex(0);
+      marker.strokeWidth = 1;
+      marker.strokeOpacity = 0.5;
+      marker.stroke = am4core.color("#3c3c3c");
+
+      legend.data = [{
+        "name": "Dem. (2016)   ",
+        "fill": "#1a80c4"
+      }, {
+        "name": "Rep. (2016)",
+        "fill": "#cc3d3d"
+      }]
+
+      var countyLegend = new am4charts.Legend();
+      countyLegend.parent = chart.chartContainer;
+      countyLegend.width = 500;
+      countyLegend.align = "right";
+      countyLegend.valign = "top";
+      countyLegend.itemContainers.template.paddingTop = 30;
+      countyLegend.data = [
+       {
+        "name": "Flipped (2018)",
+        "fill": bluePattern
+      }, {
+        "name": "Flipped (2018)",
+        "fill": redPattern
+      }];
+
+      var marker = legend.markers.template.children.getIndex(0);
+      marker.strokeWidth = 1;
+      marker.strokeOpacity = 0.5;
+      marker.stroke = am4core.color("#3c3c3c");
+      countyLegend.hide();
+
+
+
+      
+      // Create map polygon series
+      var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+      // Make map load polygon data (state shapes and names) from GeoJSON
+      polygonSeries.useGeodata = true;
+      polygonSeries.calculateVisualCenter = true;
+
+      polygonSeries.mapPolygons.template.adapter.add("fill", function(fill, target) {
+      if (target.dataItem) {
+          if (target.dataItem.value >= 0) {
+            return am4core.color("#1a80c4")
+          }
+          else {
+            return am4core.color("#cc3d3d");
+          }
+        }
+        return fill;
+      });
+
+
+      // Add State Labels
+      // var labelSeries = chart.series.push(new am4maps.MapImageSeries());
+      // var labelTemplate = labelSeries.mapImages.template.createChild(am4core.Label);
+      // labelTemplate.paddingRight = 12; 
+      // labelTemplate.horizontalCenter = "right";
+      // labelTemplate.verticalCenter = "middle";
+      // labelTemplate.fontSize = 12;
+      // labelTemplate.fill = am4core.color("#FFF");
+      // labelTemplate.nonScaling = true;
+      // labelTemplate.interactionsEnabled = false;
+      // // Lay over image
+      // polygonSeries.events.on("inited", function () {
+      //   polygonSeries.mapPolygons.each(function (polygon) {
+      //     var label = labelSeries.mapImages.create();
+      //     var state = polygon.dataItem.dataContext.id.split("-").pop();
+      //     label.latitude = polygon.visualLatitude;
+      //     label.longitude = polygon.visualLongitude;
+      //     label.children.getIndex(0).text = state;
+      //   });
+      // });
+
+      // Configure series tooltip
+      var polygonTemplate = polygonSeries.mapPolygons.template;
+      polygonTemplate.tooltipText = "{name}";
+      polygonTemplate.nonScalingStroke = true;
+      polygonTemplate.strokeWidth = 0.7;
+      polygonTemplate.stroke = am4core.color("#FFF");
+
+
+      var s = polygonTemplate.states.create("hover");
+      s.properties.opacity = 0.85;
+
+
+      // Set heatmap values for each state
+        polygonSeries.data = [
+        {id: "US-AL", value: -588708},
+        {id: "US-AK", value: -46933},
+        {id: "US-AZ", value: -91234},
+        {id: "US-AR", value: -304378},
+        {id: "US-CA", value: 4269978},
+        {id: "US-CO", value: 136386},
+        {id: "US-CT", value: 224357},
+        {id: "US-DE", value: 50476},
+        {id: "US-FL", value: -112911},
+        {id: "US-GA", value: -211141},
+        {id: "US-HI", value: 138044},
+        {id: "US-ID", value: -219290},
+        {id: "US-IL", value: 944714},
+        {id: "US-IN", value: -524160},
+        {id: "US-IA", value: -147314},
+        {id: "US-KS", value: -244013},
+        {id: "US-KY", value: -574117},
+        {id: "US-LA", value: -398484},
+        {id: "US-ME", value: 22142},
+        {id: "US-MD", value: 734759},
+        {id: "US-MA", value: 904303},
+        {id: "US-MI", value: -10704},
+        {id: "US-MN", value: 44593},
+        {id: "US-MS", value: -215583},
+        {id: "US-MO", value: -523443},
+        {id: "US-MT", value: -101531},
+        {id: "US-NE", value: -211467},
+        {id: "US-NV", value: 27202},
+        {id: "US-NH", value: 2736},
+        {id: "US-NJ", value: 546345},
+        {id: "US-NM", value: 65567},
+        {id: "US-NY", value: 1736590},
+        {id: "US-NC", value: -173315},
+        {id: "US-ND", value: -123036},
+        {id: "US-OH", value: -446841},
+        {id: "US-OK", value: -528761},
+        {id: "US-OR", value: 219703},
+        {id: "US-PA", value: -44292},
+        {id: "US-RI", value: 71982},
+        {id: "US-SC", value: -300016},
+        {id: "US-SD", value: -110263},
+        {id: "US-TN", value: -652230},
+        {id: "US-TX", value: -807179},
+        {id: "US-UT", value: -204555},
+        {id: "US-VT", value: 83204},
+        {id: "US-VA", value: 212030},
+        {id: "US-WA", value: 520971},
+        {id: "US-WV", value: -300577},
+        {id: "US-WI", value: -22748},
+        {id: "US-WY", value: -118446}
+        ]
+
+
+        mapData = [
+        {id: "US-AL", value: 10},
+        {id: "US-AK", value: 0},
+        {id: "US-AZ", value: 4},
+        {id: "US-AR", value: 5},
+        {id: "US-CA", value: 76},
+        {id: "US-CO", value: 6},
+        {id: "US-CT", value: 9},
+        {id: "US-DE", value: 6},
+        {id: "US-FL", value: 59},
+        {id: "US-GA", value: 11},
+        {id: "US-HI", value: 4},
+        {id: "US-ID", value: 1},
+        {id: "US-IL", value: 30},
+        {id: "US-IN", value: 13},
+        {id: "US-IA", value: 3},
+        {id: "US-KS", value: 1},
+        {id: "US-KY", value: 7},
+        {id: "US-LA", value: 10},
+        {id: "US-ME", value: 3},
+        {id: "US-MD", value: 4},
+        {id: "US-MA", value: 18},
+        {id: "US-MI", value: 26},
+        {id: "US-MN", value: 8},
+        {id: "US-MS", value: 7},
+        {id: "US-MO", value: 14},
+        {id: "US-MT", value: 1},
+        {id: "US-NE", value: 2},
+        {id: "US-NV", value: 4},
+        {id: "US-NH", value: 5},
+        {id: "US-NJ", value: 21},
+        {id: "US-NM", value: 1},
+        {id: "US-NY", value: 52},
+        {id: "US-NC", value: 15},
+        {id: "US-ND", value: 3},
+        {id: "US-OH", value: 34},
+        {id: "US-OK", value: 4},
+        {id: "US-OR", value: 6},
+        {id: "US-PA", value: 30},
+        {id: "US-RI", value: 4},
+        {id: "US-SC", value: 9},
+        {id: "US-SD", value: 4},
+        {id: "US-TN", value: 28},
+        {id: "US-TX", value: 58},
+        {id: "US-UT", value: 3},
+        {id: "US-VT", value: 1},
+        {id: "US-VA", value: 12},
+        {id: "US-WA", value: 8},
+        {id: "US-WV", value: 4},
+        {id: "US-WI", value: 12},
+        {id: "US-WY", value: 3}
+      ];
+
+
+
+      ///////// Circles
+      var imageSeries = chart.series.push(new am4maps.MapImageSeries());
+      imageSeries.useGeodata = true;
+
+      imageSeries.data = mapData;
+      imageSeries.dataFields.value = "value";
+
+      var imageTemplate = imageSeries.mapImages.template;
+      imageTemplate.nonScaling = true
+
+      var circle = imageTemplate.createChild(am4core.Circle);
+      circle.fillOpacity = 0.5;
+      circle.fill = am4core.color("#3c3c3c");
+      circle.tooltipText = "[bold]{value}[/] Removed";
+
+      imageTemplate.events.on("hit", function(ev) {clickEvent(ev);});
+
+
+      imageSeries.heatRules.push({
+        "target": circle,
+        "property": "radius",
+        "min": 0,
+        "max": 30,
+        "dataField": "value"
+      })
+
+      imageTemplate.adapter.add("latitude", function(latitude, target) {
+        var polygon = polygonSeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLatitude;
+         }
+         return latitude;
+      })
+
+      imageTemplate.adapter.add("longitude", function(longitude, target) {
+        var polygon = polygonSeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLongitude;
+         }
+         return longitude;
+      })
+
+
+
+      var label = imageTemplate.createChild(am4core.Label);
+      label.text = "{value}";
+      label.fill = am4core.color("#fff");
+      label.verticalCenter = "middle";
+      label.horizontalCenter = "middle";
+
+      // label.nonScaling = true;
+      /////////  END of Circles def
+
+      ///////// Counties
+      colorData = {
+        "01113": "1", "01091": "1", "01065": "1", "01011": "1", "01105": "1", "01131": "1",
+        "01085": "1", "01119": "1", "01063": "1", "01087": "1", "01047": "1", "01073": "1",
+        "01101": "1", "04005": "1", "04001": "1", "04019": "1", "04023": "1", "05119": "1",
+        "05069": "1", "05041": "1", "05017": "1", "05107": "1", "05077": "1", "05123": "1",
+        "05035": "1", "06001": "1", "06003": "1", "06013": "1", "06019": "1", "06023": "1",
+        "06025": "1", "06033": "1", "06037": "1", "06041": "1", "06045": "1", "06047": "1",
+        "06051": "1", "06053": "1", "06055": "1", "06057": "1", "06059": "1", "06065": "4",
+        "06067": "1", "06069": "1", "06071": "1", "06073": "1", "06075": "1", "06077": "1",
+        "06079": "1", "06081": "1", "06083": "1", "06085": "1", "06087": "1", "06095": "1",
+        "06097": "1", "06099": "1", "06111": "1", "06113": "1", "08107": "1", "08037": "1",
+        "08117": "1", "08019": "1", "08047": "1", "08059": "1", "08005": "1", "08001": "1",
+        "08031": "1", "08014": "1", "08013": "1", "08069": "1", "08065": "1", "08097": "1",
+        "08051": "1", "08109": "1", "08003": "1", "08023": "1", "08091": "1", "08113": "1",
+        "08111": "1", "08067": "1", "09003": "1", "09013": "1", "09011": "1", "09007": "1",
+        "09009": "1", "09001": "1", "10003": "1", "12073": "1", "12039": "1", "12001": "1",
+        "12095": "1", "12097": "1", "12057": "1", "12099": "1", "12011": "1", "12086": "1",
+        "13303": "1", "13061": "1", "13265": "1", "13033": "1", "13261": "1", "13009": "1",
+        "13301": "1", "13243": "1", "13037": "1", "13273": "1", "13259": "1", "13163": "1",
+        "13263": "1", "13217": "1", "13193": "1", "13141": "1", "13179": "1", "13151": "1",
+        "13097": "1", "13067": "1", "13247": "1", "13021": "1", "13215": "1", "13095": "1",
+        "13051": "1", "13059": "1", "13135": "1", "13245": "1", "13063": "1", "13121": "1",
+        "13089": "1", "15001": "1", "15003": "1", "15009": "1", "15005": "1", "17201": "1",
+        "17077": "1", "16057": "1", "17143": "1", "16013": "1", "17161": "1", "18105": "1",
+        "17019": "1", "17197": "1", "17089": "1", "17097": "1", "17043": "1", "18097": "1",
+        "17031": "1", "17037": "1", "17163": "1", "18089": "1", "18141": "1", "19163": "1",
+        "19013": "1", "19169": "1", "19113": "1", "21067": "1", "20209": "1", "20045": "1",
+        "19153": "1", "19103": "1", "21111": "1", "22107": "1", "22035": "1", "22065": "1",
+        "22091": "1", "22093": "1", "22047": "1", "22017": "1", "22071": "1", "24003": "1",
+        "24017": "1", "24027": "1", "24005": "1", "24510": "1", "24031": "1", "27075": "1",
+        "27017": "1", "27109": "1", "27031": "1", "26121": "1", "26103": "1", "27163": "1",
+        "27037": "1", "26077": "1", "26049": "1", "26065": "1", "26125": "1", "26161": "1",
+        "27123": "1", "27053": "1", "26163": "1", "25019": "1", "25007": "1", "25001": "1",
+        "25023": "4", "25005": "1", "25021": "1", "15007": "1", "25025": "1", "25009": "1",
+        "25017": "4", "25027": "4", "25013": "1", "25015": "1", "25011": "1", "25003": "1",
+        "23009": "1", "23027": "1", "23013": "1", "23015": "1", "23023": "1", "23005": "1",
+        "23031": "1", "27137": "1", "22033": "1", "22095": "1", "32031": "1", "32003": "1",
+        "28113": "1", "28055": "1", "30003": "1", "28105": "1", "30023": "1", "28061": "1",
+        "30031": "1", "28029": "1", "28163": "1", "28135": "1", "28069": "1", "28119": "1",
+        "28093": "1", "30035": "1", "28157": "1", "28025": "1", "28143": "1", "28001": "1",
+        "28053": "1", "29189": "1", "28103": "1", "28021": "1", "28133": "1", "28027": "1",
+        "28011": "1", "28083": "1", "29019": "1", "28051": "1", "28151": "1", "30063": "1",
+        "28049": "1", "29095": "1", "28125": "1", "30093": "1", "28065": "1", "31109": "1",
+        "35019": "1", "35006": "1", "35053": "1", "35033": "1", "35017": "1", "35043": "1",
+        "35028": "1", "34011": "1", "35047": "1", "31055": "1", "35039": "1", "35055": "1",
+        "34001": "1", "35031": "1", "35013": "1", "34035": "1", "34005": "1", "35049": "1",
+        "34031": "1", "35001": "1", "34003": "1", "34021": "1", "34023": "1", "34007": "1",
+        "34039": "1", "34017": "1", "34013": "1", "33017": "1", "33013": "1", "33009": "1",
+        "33005": "1", "37139": "1", "37189": "1", "36027": "1", "38085": "1", "36019": "1",
+        "38079": "1", "37187": "1", "37165": "1", "37007": "1", "36021": "1", "37093": "1",
+        "37195": "1", "37015": "1", "37131": "1", "37185": "1", "37091": "1", "37037": "1",
+        "36093": "1", "37181": "1", "37147": "1", "37083": "1", "37065": "1", "36087": "1",
+        "36111": "1", "37067": "1", "36109": "1", "37021": "1", "37051": "1", "36029": "1",
+        "36067": "1", "36001": "1", "36059": "1", "37135": "1", "37081": "1", "36055": "1",
+        "37063": "1", "37183": "1", "37119": "1", "36119": "1", "36005": "1", "36081": "1",
+        "36047": "1", "36061": "1", "39061": "1", "39009": "1", "39049": "1", "39035": "1",
+        "39153": "1", "39093": "1", "39095": "1", "39099": "1", "41007": "1", "41067": "1",
+        "41051": "1", "41005": "1", "41027": "1", "41041": "1", "41003": "1", "41039": "1",
+        "42045": "1", "42029": "1", "42091": "1", "42101": "1", "42017": "1", "42077": "1",
+        "42043": "1", "42089": "1", "42069": "1", "42027": "1", "42003": "1", "44007": "1",
+        "44001": "1", "44009": "1", "44005": "1", "46041": "1", "46017": "1", "46121": "1",
+        "46113": "1", "46027": "1", "47037": "1", "47075": "1", "47157": "1", "49035": "1",
+        "49043": "1", "56039": "1", "50019": "1", "50005": "1", "50011": "1", "50015": "1",
+        "50023": "1", "50017": "1", "50013": "1", "50007": "1", "50001": "1", "50027": "4",
+        "50021": "1", "50003": "1", "50025": "1", "48261": "1", "48109": "1", "45033": "1",
+        "51790": "1", "48389": "1", "48283": "1", "51750": "1", "45027": "1", "48273": "1",
+        "51840": "1", "51181": "1", "51147": "1", "51121": "1", "51131": "1", "48163": "1",
+        "51595": "1", "51678": "1", "45053": "1", "48377": "1", "51081": "1", "51183": "1",
+        "51670": "1", "51036": "1", "48505": "1", "48465": "1", "51620": "1", "48127": "1",
+        "48247": "1", "48249": "1", "48047": "1", "51690": "1", "51025": "1", "48131": "1",
+        "51685": "1", "45049": "1", "45069": "1", "45009": "1", "48489": "1", "48507": "1",
+        "45005": "1", "45061": "1", "51683": "1", "45039": "1", "51630": "1", "45067": "1",
+        "51830": "1", "51600": "1", "51590": "1", "51660": "1", "51610": "1", "45089": "1",
+        "51800": "1", "45085": "1", "48427": "1", "51770": "1", "48323": "1", "51730": "1",
+        "45019": "1", "51003": "1", "45075": "1", "51540": "1", "51740": "1", "48157": "1",
+        "51700": "1", "51650": "1", "48479": "1", "48061": "1", "51107": "1", "51087": "1",
+        "51710": "1", "51153": "1", "51510": "1", "45079": "1", "51760": "1", "48215": "1",
+        "51013": "1", "48029": "1", "48141": "1", "48201": "1", "48453": "1", "51059": "1",
+        "48113": "1", "53011": "1", "55045": "1", "55078": "1", "53075": "1", "55007": "1",
+        "55003": "1", "55097": "1", "55031": "1", "55049": "1", "53029": "1", "55035": "1",
+        "55063": "1", "53031": "1", "55105": "1", "53035": "1", "53073": "1", "53067": "1",
+        "53053": "1", "55025": "1", "55079": "1", "53033": "1", "02016": "2", "02105": "2",
+        "02240": "2", "02100": "2", "02100": "2", "02195": "2", "02195": "2", "02170": "2",
+        "02170": "2", "02050": "2", "02050": "2", "02122": "2", "02122": "2", "02020": "2",
+        "02020": "2", "02070": "2", "02070": "2", "02110": "2", "02110": "2", "02150": "2",
+        "02150": "2", "02220": "2", "02220": "2", "02261": "2", "02261": "2", "02013": "2",
+        "02013": "2", "02060": "2", "02060": "2", "02068": "2", "02068": "2", "02188": "2",
+        "02188": "2", "02230": "2", "02230": "2", "02275": "2", "02275": "2", "02185": "2",
+        "02185": "2", "02164": "2", "02164": "2", "02290": "2", "02290": "2", "02198": "2",
+        "02198": "2", "02180": "2", "02180": "2", "02158": "2", "02158": "2", "02282": "2",
+        "02282": "2", "02130": "2", "02130": "2", "02090": "2", "02090": "2", "02105": "2",
+        "02240": "2", "29510": "1", "05143": "3", "12031": "3", "12117": "3", "12103": "3",
+        "16001": "3", "20173": "3", "26081": "3", "36103": "3", "40109": "3", "42049": "3",
+        "46099": "3", "24033": "1", "53057": "1", "53061": "1", "53055": "1"
+        };
+      var countySeries = chart.series.push(new am4maps.MapPolygonSeries());
+      countySeries.hide();
+
+
+      var countyTemplate = countySeries.mapPolygons.template;
+      countyTemplate.tooltipText = "{name}";
+      countyTemplate.stroke = am4core.color("#3c3c3c");
+
+      countyTemplate.adapter.add("fill", function(fill, target) {
+      if (target.dataItem) {
+          if(target.dataItem.dataContext) {
+            if(colorData[target.dataItem.dataContext.id]==1){
+              return am4core.color("#1a80c4");
+            }
+            else if (colorData[target.dataItem.dataContext.id]==2){
+              return am4core.color("#e2e2e2");
+            }
+            else if (colorData[target.dataItem.dataContext.id]==3){
+              let bluePattern = new am4core.LinePattern();
+              bluePattern.width = 7;
+              bluePattern.height = 7;
+              bluePattern.stroke = am4core.color("#1a80c4");
+              bluePattern.strokeWidth = 1;
+              bluePattern.rotation = -45;
+              bluePattern.backgroundFill = am4core.color("#005084");
+              bluePattern.backgroundOpacity = 1;
+
+              return bluePattern;
+            }
+            else if (colorData[target.dataItem.dataContext.id]==4){
+              let redPattern = new am4core.LinePattern();
+              redPattern.width = 7;
+              redPattern.height = 7;
+              redPattern.stroke = am4core.color("#cc3d3d");
+              redPattern.strokeWidth = 1;
+              redPattern.rotation = -45;
+              redPattern.backgroundFill = am4core.color("#9D0000");
+              redPattern.backgroundOpacity = 1;
+
+              return redPattern;
+            }
+          return am4core.color("#cc3d3d");
+        }
+      }
+      });
+
+
+      // Create hover state and set alternative fill color
+      var hs = countyTemplate.states.create("hover");
+      hs.properties.opacity = 0.85;
+      // hs.properties.fill = am4core.color("#3c3c3c");
+
+      ///////// END of county series def /////////
+
+      ///////// Circles 2 Electric Boogaloo
+      smallCirclesData = [
+        {id:"01073", value: 5},{id:"01089", value: 1},{id:"01097", value: 1},{id:"01101", value: 3},{id: "05143", value: 1},
+        {id: "05119", value: 4},{id: "04013", value: 3},{id: "04019", value: 1},{id: "06029", value: 2},{id: "06037", value: 20},
+        {id: "06065", value: 5},{id: "06001", value: 4},{id: "06067", value: 9},{id: "06071", value: 1},{id: "06073", value: 4},
+        {id: "06075", value: 9},{id: "06085", value: 9},{id: "06059", value: 8},{id: "06083", value: 3},{id: "06097", value: 2},
+        {id: "08031", value: 6},{id: "09003", value: 7},{id: "09009", value: 2},{id: "11001", value: 3},{id: "10003", value: 6},
+        {id: "12071", value: 6},{id: "12001", value: 1},{id: "12031", value: 8},{id: "12015", value: 6},{id: "12086", value: 7},
+        {id: "12117", value: 5},{id: "12095", value: 7},{id: "12033", value: 2},{id: "12103", value: 2},{id: "12073", value: 2},
+        {id: "12057", value: 8},{id: "12099", value: 5},{id: "13121", value: 3},{id: "13245", value: 1},{id: "13135", value: 3},
+        {id: "13021", value: 2},{id: "13113", value: 2},{id: "15003", value: 4},{id: "19113", value: 1},{id: "19153", value: 2},
+        {id: "16001", value: 1},{id: "17031", value: 20},{id: "17043", value: 5},{id: "17019", value: 1},{id: "17161", value: 1},
+        {id: "17143", value: 2},{id: "17167", value: 1},{id: "18163", value: 2},{id: "18003", value: 3},{id: "18089", value: 2},
+        {id: "18097", value: 5},{id: "18141", value: 1},{id: "20173", value: 1},{id: "21067", value: 3},{id: "21111", value: 4},
+        {id: "22033", value: 2},{id: "22055", value: 1},{id: "22071", value: 5},{id: "22017", value: 2},{id: "25025", value: 9},
+        {id: "25023", value: 3},{id: "25017", value: 1},{id: "25027", value: 3},{id: "25013", value: 2},{id: "24005", value: 1},
+        {id: "24033", value: 1},{id: "24041", value: 1},{id: "24031", value: 1},{id: "23019", value: 1},{id: "23005", value: 2},
+        {id: "26163", value: 3},{id: "26081", value: 7},{id: "26065", value: 1},{id: "26125", value: 12},{id: "26055", value: 3},
+        {id: "27053", value: 5},{id: "27123", value: 3},{id: "29031", value: 1},{id: "29019", value: 1},{id: "29095", value: 4},
+        {id: "29189", value: 6},{id: "29077", value: 2},{id: "28043", value: 1},{id: "28047", value: 2},{id: "28035", value: 1},
+        {id: "28049", value: 3},{id: "30111", value: 1},{id: "37119", value: 5},{id: "37051", value: 4},{id: "37081", value: 3},
+        {id: "37183", value: 3},{id: "38017", value: 1},{id: "38101", value: 2},{id: "31055", value: 2},{id: "33011", value: 5},
+        {id: "34007", value: 7},{id: "34017", value: 7},{id: "34003", value: 3},{id: "34021", value: 4},{id: "35001", value: 1},
+        {id: "32003", value: 3},{id: "32031", value: 1},{id: "36001", value: 5},{id: "36047", value: 5},{id: "36029", value: 5},
+        {id: "36059", value: 2},{id: "36103", value: 4},{id: "36081", value: 10},{id: "36071", value: 1},{id: "36055", value: 5},
+        {id: "36067", value: 6},{id: "36119", value: 9},{id: "39061", value: 8},{id: "39035", value: 8},{id: "39049", value: 10},
+        {id: "39113", value: 3},{id: "39095", value: 3},{id: "39099", value: 2},{id: "40109", value: 2},{id: "40143", value: 2},
+        {id: "41039", value: 2},{id: "41051", value: 4},{id: "42013", value: 1},{id: "42049", value: 2},{id: "42043", value: 5},
+        {id: "42021", value: 1},{id: "42017", value: 4},{id: "42101", value: 10},{id: "42003", value: 4},{id: "42069", value: 3},
+        {id: "44007", value: 4},{id: "45019", value: 2},{id: "45079", value: 4},{id: "45045", value: 3},{id: "46005", value: 1},
+        {id: "46099", value: 3},{id: "47065", value: 5},{id: "47179", value: 2},{id: "47093", value: 5},{id: "47157", value: 8},
+        {id: "47037", value: 8},{id: "48441", value: 1},{id: "48375", value: 1},{id: "48453", value: 6},{id: "48245", value: 2},
+        {id: "48113", value: 12},{id: "48355", value: 1},{id: "48141", value: 2},{id: "48439", value: 8},{id: "48201", value: 14},
+        {id: "48303", value: 1},{id: "48215", value: 1},{id: "48329", value: 1},{id: "48029", value: 8},{id: "49035", value: 3},
+        {id: "51107", value: 2},{id: "51059", value: 1},{id: "51710", value: 2},{id: "51159", value: 4},{id: "51770", value: 3},
+        {id: "50027", value: 1},{id: "53033", value: 5},{id: "53063", value: 2},{id: "53053", value: 1},{id: "55009", value: 2},
+        {id: "55025", value: 3},{id: "55079", value: 6},{id: "55073", value: 1},{id: "54039", value: 4},{id: "56025", value: 1},
+        {id: "56037", value: 2}];
+
+      var smallCircleSeries = chart.series.push(new am4maps.MapImageSeries());
+      smallCircleSeries.useGeodata = true;
+
+      smallCircleSeries.data = smallCirclesData;
+      smallCircleSeries.dataFields.value = "value";
+
+
+
+      var smallCircleTemplate = smallCircleSeries.mapImages.template;
+      smallCircleTemplate.nonScaling = true
+
+      smallCircleTemplate.fill = chart.colors.getIndex(0);
+
+      var smallCircle = smallCircleTemplate.createChild(am4core.Circle);
+
+      smallCircle.fillOpacity = 0;
+      smallCircle.tooltipText = "[bold]{value}[/] Removed";
+
+
+      // smallCircleSeries.heatRules.push({
+      //   "target": smallCircle,
+      //   "property": "radius",
+      //   "min": 0,
+      //   "max": 20,
+      //   "dataField": "value"
+      // })
+
+      smallCircleSeries.hide();
+
+      smallCircleTemplate.adapter.add("latitude", function(latitude, target) {
+        var polygon = countySeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLatitude;
+         }
+         return latitude;
+      })
+
+      smallCircleTemplate.adapter.add("longitude", function(longitude, target) {
+        var polygon = countySeries.getPolygonById(target.dataItem.dataContext.id);
+        if(polygon){
+          return polygon.visualLongitude;
+         }
+         return longitude;
+      })
+
+      var label = smallCircleTemplate.createChild(am4core.Label);
+      label.text = "{value}";
+      label.fill = am4core.color("#FFF");
+      label.verticalCenter = "middle";
+      label.horizontalCenter = "middle";
+
+
+      /////////  END of Circles2 def
+
+      var restoreContinents = function(){
+        chart.goHome();
+        polygonSeries.show();
+        imageSeries.show();
+        countySeries.hide();
+        smallCircleSeries.hide();
+        homeButton.hide();
+        countyLegend.hide();
+      };
+
+      // Zoom control
+      chart.zoomControl = new am4maps.ZoomControl();
+      chart.zoomControl.align = "left";
+      chart.zoomControl.valign = "top";
+
+      var homeButton = new am4core.Button();
+
+      homeButton.events.on("hit", restoreContinents);
+
+      homeButton.icon = new am4core.Sprite();
+      homeButton.padding(7, 5, 7, 5);
+      homeButton.width = 30;
+      homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+      homeButton.marginTop = 5;
+      homeButton.parent = chart.zoomControl;
+      // homeButton.insertBefore(chart.zoomControl.plusButton);
+      homeButton.hide();
+
+
+      function clickEvent(ev) {
+        let c = ev.target.series.chart;
+        c.zoomToMapObject(ev.target);
+        // console.log(ev.target.dataItem.dataContext);
+        homeButton.show();
+
+        switch(ev.target.dataItem.dataContext.id){
+          case "US-AL": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/alLow.json"; break;
+          // case "US-AL": countySeries.geodata = am4geodata_region_usa_alLow; break;
+          case "US-AK": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/akLow.json"; break;
+          case "US-AZ": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/azLow.json"; break;
+          case "US-AR": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/arLow.json"; break;
+          case "US-CA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/caLow.json"; break;
+          case "US-CO": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/coLow.json"; break;
+          case "US-CT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ctLow.json"; break;
+          case "US-DE": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/deLow.json"; break;
+          case "US-FL": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/flLow.json"; break;
+          case "US-GA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/gaLow.json"; break;
+          case "US-HI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/hiLow.json"; break;
+          case "US-ID": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/idLow.json"; break;
+          // case "US-ID": countySeries.geodata = am4geodata_region_usa_idLow; break;
+          case "US-IL": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ilLow.json"; break;
+          case "US-IN": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/inLow.json"; break;
+          case "US-IA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/iaLow.json"; break;
+          case "US-KS": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ksLow.json"; break;
+          // case "US-KS": countySeries.geodata = am4geodata_region_usa_ksLow; break;
+          case "US-KY": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/kyLow.json"; break;
+          case "US-LA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/laLow.json"; break;
+          case "US-ME": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/meLow.json"; break;
+          case "US-MD": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/mdLow.json"; break;
+          case "US-MA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/maLow.json"; break;
+          // case "US-MA": countySeries.geodata = am4geodata_region_usa_maLow; break;
+          case "US-MI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/miLow.json"; break;
+          // case "US-MI": countySeries.geodata = am4geodata_region_usa_miLow; break;
+          case "US-MN": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/mnLow.json"; break;
+          case "US-MS": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/msLow.json"; break;
+          case "US-MO": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/moLow.json"; break;
+          case "US-MT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/mtLow.json"; break;
+          case "US-NE": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/neLow.json"; break;
+          case "US-NV": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nvLow.json"; break;
+          case "US-NH": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nhLow.json"; break;
+          case "US-NJ": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/njLow.json"; break;
+          case "US-NM": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nmLow.json"; break;
+          case "US-NY": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/nyLow.json"; break;
+          // case "US-NY": countySeries.geodata = am4geodata_region_usa_nyLow; break;
+          case "US-NC": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ncLow.json"; break;
+          case "US-ND": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ndLow.json"; break;
+          case "US-OH": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/ohLow.json"; break;
+          case "US-OK": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/okLow.json"; break;
+          case "US-OR": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/orLow.json"; break;
+          case "US-PA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/paLow.json"; break;
+          // case "US-PA": countySeries.geodata = am4geodata_region_usa_paLow; break;
+          case "US-RI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/riLow.json"; break;
+          case "US-SC": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/scLow.json"; break;
+          case "US-SD": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/sdLow.json"; break;
+          // case "US-SD": countySeries.geodata = am4geodata_region_usa_sdLow; break;
+          case "US-TN": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/tnLow.json"; break;
+          case "US-TX": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/txLow.json"; break;
+          case "US-UT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/utLow.json"; break;
+          case "US-VT": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/vtLow.json"; break;
+          case "US-VA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/vaLow.json"; break;
+          // case "US-VA": countySeries.geodata = am4geodata_region_usa_vaLow; break;
+          case "US-WA": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/waLow.json"; break;
+          case "US-WV": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/wvLow.json"; break;
+          case "US-WI": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/wiLow.json"; break;
+          case "US-WY": countySeries.geodataSource.url="https://cdn.amcharts.com/lib/4/geodata/json/region/usa/wyLow.json"; break;
+          default: countySeries.hide(); break;
+        }
+
+        countySeries.geodataSource.load();
+
+        polygonSeries.hide();
+        imageSeries.hide();
+        countySeries.show();
+        smallCircleSeries.show();
+        countyLegend.show();
+        countySeries.useGeodata = true;
+        countySeries.calculateVisualCenter = true;
+
+      }
+
+      // Click event for states
+      polygonSeries.mapPolygons.template.events.on("hit", function(ev) {clickEvent(ev);});
+
+
+      countySeries.mapPolygons.template.events.on("hit", function(ev) {
+        console.log(ev.target.dataItem.dataContext.id);
+      });
+
+      // chart.seriesContainer.draggable = false;
+
+      }); // end am4core.ready()
+
+
+      // Counties Impacted PIE 1
+      am4core.ready(function() {
+        var selected;
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var pieChart1 = am4core.create("piechartdiv", am4charts.PieChart);
+        pieChart1.responsive.enabled = true;
+
+        /* Create legend */
+        pieChart1.legend = new am4charts.Legend();
+        pieChart1.legend.useDefaultMarker = true;
+
+        /* Create a separate container to put legend in */
+        var legendContainer = am4core.create("legenddiv", am4core.Container);
+        legendContainer.width = am4core.percent(100);
+        legendContainer.height = am4core.percent(100);
+        pieChart1.legend.paddingRight = 100
+        pieChart1.legend.parent = legendContainer;
+        pieChart1.legend.position = "top";
+        pieChart1.legend.markers.template.children.getIndex(0).cornerRadius(12, 12, 12, 12);
+
+        // Add data
+        pieChart1Data = [
+        {
+          type: "Republican",
+          value: 54,
+          color: am4core.color("#cc3d3d"),
+          subs: [{
+            type: "Republican (2016)",
+            value: 49
+          },
+          {
+            type: "Republican (2018)",
+            value: 5
+          }]
+        },{
+          type: "Democrat",
+          value: 130,
+          color: am4core.color("#1a80c4"),
+          subs: [{
+            type: "Democrat (2018)",
+            value: 11
+          },{
+            type: "Democrat (2016)",
+            value: 119
+          }]
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = pieChart1.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "type";
+        pieSeries.slices.template.propertyFields.isActive = "pulled";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // pieSeries.labels.minGridDistance = 0.1;
+
+        // Configure labels
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        // pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+        pieSeries.labels.template.text = "{value}";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+        pieSeries.slices.template.propertyFields.fill = "color";
+
+        pieChart1.data = generateChartData(pieChart1Data);
+
+        function generateChartData(types) {
+          var chartData = [];
+          for (var i = 0; i < types.length; i++) {
+            if (i == selected) {
+              for (var x = 0; x < types[i].subs.length; x++) {
+                chartData.push({
+                  type: types[i].subs[x].type,
+                  value: types[i].subs[x].value,
+                  color: types[i].color,
+                  pulled: true
+                });
+              }
+            } else {
+              chartData.push({
+                type: types[i].type,
+                value: types[i].value,
+                color: types[i].color,
+                id: i
+              });
+            }
+          }
+          return chartData;
+        }
+
+        pieSeries.slices.template.events.on("hit", function(event) {
+          if (event.target.dataItem.dataContext.id != undefined) {
+            selected = event.target.dataItem.dataContext.id;
+          } else {
+            selected = undefined;
+          }
+          pieChart1.data = generateChartData(pieChart1Data);
+        });
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+      }); // end am4core.ready()
+
+
+      // Votes Impacted PIE 2
+      am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("piechartdiv2", am4charts.PieChart);
+        // chart.interactionsEnabled = false;
+
+        /* Create legend */
+        chart.legend = new am4charts.Legend();
+        chart.legend.useDefaultMarker = true;
+
+        /* Create a separate container to put legend in */
+        var legendContainer = am4core.create("legenddiv2", am4core.Container);
+        legendContainer.width = am4core.percent(100);
+        legendContainer.height = am4core.percent(100);
+        chart.legend.parent = legendContainer;
+        chart.legend.position = "top";
+        chart.legend.markers.template.children.getIndex(0).cornerRadius(12, 12, 12, 12);
+
+        // Add data
+        chart.data = [
+        {
+          "Voted": "Voted Trump (2016)",
+          "percent": 19999072
+        },
+        {
+          "Voted": "Voted Clinton (2016)",
+          "percent": 32864410
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "percent";
+        pieSeries.dataFields.category = "Voted";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+        pieSeries.slices.template.inert = true;
+
+
+        pieSeries.colors.list = [
+          am4core.color("#cc3d3d"),
+          am4core.color("#1a80c4")
+        ];
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+      }); // end am4core.ready()
+
+      // USPS Sorting Machines PIE 3
+      am4core.ready(function() {
+        var selected;
+
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("piechartdiv3", am4charts.PieChart);
+        chart.responsive.enabled = true;
+
+        // chart.legend = new am4charts.Legend()
+        // chart.legend.position = 'bottom'
+                /* Create legend */
+        chart.legend = new am4charts.Legend();
+        chart.legend.useDefaultMarker = true;
+
+        /* Create a separate container to put legend in */
+        var legendContainer = am4core.create("legenddiv3", am4core.Container);
+        legendContainer.width = am4core.percent(100);
+        legendContainer.height = am4core.percent(100);
+        chart.legend.paddingRight = 100
+        chart.legend.markers.template.children.getIndex(0).cornerRadius(12, 12, 12, 12);
+        chart.legend.parent = legendContainer;
+        chart.legend.position = "top";
+
+        chart.legend.itemContainers.template.events.on("hit", function(ev) {//do nothing
+        });
+
+        // Add data
+        chartData = [
+        {
+          type: "Republican",
+          value: 123,//146
+          color: am4core.color("#cc3d3d"),
+          subs: [{
+            type: "Repblican (2016)",
+            value: 110
+          },
+          {
+            type: "Republican (2018)",
+            value: 13
+          }]
+        },{
+          type: "Democrat",
+          value: 539,//516
+          color: am4core.color("#1a80c4"),
+          subs: [{
+            type: "Democrat (2018)",
+            value: 36
+          },{
+            type: "Democrat (2016)",
+            value: 503
+          }]
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "type";
+        pieSeries.slices.template.propertyFields.isActive = "pulled";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+        // pieSeries.labels.minGridDistance = 0.1;
+
+        // Configure labels
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        // pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+        pieSeries.labels.template.text = "{value}";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+        pieSeries.slices.template.propertyFields.fill = "color";
+
+        chart.data = generateChartData(chartData);
+
+        function generateChartData(types) {
+          var chartData = [];
+          for (var i = 0; i < types.length; i++) {
+            if (i == selected) {
+              for (var x = 0; x < types[i].subs.length; x++) {
+                chartData.push({
+                  type: types[i].subs[x].type,
+                  value: types[i].subs[x].value,
+                  color: types[i].color,
+                  pulled: true
+                });
+              }
+            } else {
+              chartData.push({
+                type: types[i].type,
+                value: types[i].value,
+                color: types[i].color,
+                id: i
+              });
+            }
+          }
+          return chartData;
+        }
+
+        pieSeries.slices.template.events.on("hit", function(event) {
+          if (event.target.dataItem.dataContext.id != undefined) {
+            selected = event.target.dataItem.dataContext.id;
+          } else {
+            selected = undefined;
+          }
+          chart.data = generateChartData(chartData);
+        });
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+      }); // end am4core.ready()
+
+      // PIE 4
+      // Votes Impacted PIE 2
+      am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("piechartdiv4", am4charts.PieChart);
+        // chart.interactionsEnabled = false;
+
+        var bluePattern = new am4core.LinePattern();
+        bluePattern.width = 7;
+        bluePattern.height = 7;
+        bluePattern.stroke = am4core.color("#1a80c4");
+        bluePattern.strokeWidth = 1;
+        bluePattern.rotation = -45;
+        bluePattern.backgroundFill = am4core.color("#005084");
+        bluePattern.backgroundOpacity = 1;
+
+        // Add data
+        chart.data = [
+        {
+          Voted: "Democrat (2016)",
+          value: 153,
+          color: am4core.color("#1a80c4"),
+        },
+        {
+          Voted: "Flipped (2018)",
+          value: 24,
+          color: bluePattern
+        },
+        {
+          Voted: "Republican (2016)",
+          value: 37,
+          color: am4core.color("#cc3d3d")
+        }
+        ];
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "Voted";
+        pieSeries.slices.template.stroke = am4core.color("#FFF");
+        pieSeries.slices.template.strokeWidth = 1;
+        pieSeries.slices.template.strokeOpacity = 1;
+        pieSeries.slices.template.inert = true;
+
+        pieSeries.slices.template.propertyFields.fill = "color";
+
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.alignLabels = false;
+        pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+        pieSeries.labels.template.radius = am4core.percent(-40);
+        pieSeries.labels.template.fill = am4core.color("#FFF");
+
+
+      }); // end am4core.ready()
+
+
+      am4core.ready(function() {
+
+        // Create chart instance
+        var swingStatesChart = am4core.create("swingStatesBarGraph", am4charts.XYChart);
+
+        swingStatesChart.legend = new am4charts.Legend()
+        swingStatesChart.legend.position = 'top'
+        swingStatesChart.legend.paddingBottom = 20
+        swingStatesChart.legend.labels.template.maxWidth = 150
+        swingStatesChart.legend.reverseOrder = true;
+
+        // Add data
+        swingStatesChart.data = [
+          {"state": "Florida","rep": 14, "dem": 30, "dem18": 15},
+          {"state": "Ohio","rep": 3,"dem": 31},
+          {"state": "Pennsylvania","rep": 2,"dem": 26, "dem18": 2},
+          {"state": "Michigan","rep": 3,"dem": 16, "dem18": 7},
+          {"state": "North Carolina","dem": 15},
+          {"state": "Virginia","rep": 7,"dem": 5},
+          {"state": "Wisconsin","rep": 3,"dem": 9},
+          {"state": "Minnesota","dem": 8},
+          {"state": "Colorado","dem": 6},
+          {"state": "New Hampshire","rep": 5},
+          {"state": "Nevada","dem": 4},
+          {"state": "Iowa","dem": 3},
+        ];
+
+
+        // // Create axes
+        var xAxis = swingStatesChart.xAxes.push(new am4charts.CategoryAxis())
+        xAxis.dataFields.category = 'state'
+        xAxis.renderer.cellStartLocation = 0.1
+        xAxis.renderer.cellEndLocation = 0.9
+        xAxis.renderer.grid.template.location = 0;
+        xAxis.renderer.minGridDistance = 0;
+
+        xAxis.renderer.labels.template.verticalCenter = "left"
+        xAxis.renderer.labels.template.horizontalCenter = "right"
+        xAxis.renderer.labels.template.rotation = -45;
+
+
+
+        var yAxis = swingStatesChart.yAxes.push(new am4charts.ValueAxis());
+        yAxis.title.text = "USPS Sorting Machines Scheduled for Removal";
+        yAxis.min = 0;
+
+        // Create series
+        function createSeries(field, name, color) {
+          var series = swingStatesChart.series.push(new am4charts.ColumnSeries());
+          series.dataFields.valueY = field;
+          series.dataFields.categoryX = "state";
+          series.name = name;
+          series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+          series.columns.template.height = am4core.percent(100);
+          series.columns.template.stroke = am4core.color("#FFF");
+          series.columns.template.strokeWidth = 1;
+          series.columns.template.strokeOpacity = 1;
+          series.columns.template.fill = color;
+          series.sequencedInterpolation = true;
+
+
+          series.stacked = true;
+
+          var valueLabel = series.bullets.push(new am4charts.LabelBullet());
+          valueLabel.label.text = "{valueY}";
+          valueLabel.label.dy = 10;
+          valueLabel.label.hideOversized = false;
+          valueLabel.label.truncate = false;
+          valueLabel.label.fill = am4core.color("#fff");
+
+        }
+
+        var bluePattern = new am4core.LinePattern();
+        bluePattern.width = 7;
+        bluePattern.height = 7;
+        bluePattern.stroke = am4core.color("#1a80c4");
+        bluePattern.strokeWidth = 1;
+        bluePattern.rotation = -45;
+        bluePattern.backgroundFill = am4core.color("#005084");
+        bluePattern.backgroundOpacity = 1;
+
+        var redPattern = new am4core.LinePattern();
+        redPattern.width = 7;
+        redPattern.height = 7;
+        redPattern.stroke = am4core.color("#cc3d3d");
+        redPattern.strokeWidth = 1;
+        redPattern.rotation = -45;
+        redPattern.backgroundFill = am4core.color("#9D0000");
+        redPattern.backgroundOpacity = 1;
+
+        createSeries("rep18", "Flipped (2018)", redPattern);
+        createSeries("rep", "Republican (2016)", am4core.color("#cc3d3d"));
+        createSeries("dem18", "Flipped (2018)", bluePattern);
+        createSeries("dem", "Democrat (2016)", am4core.color("#1a80c4"));
+
+
+        // xAxis.events.on("sizechanged", function(ev) {
+        //   // console.log(ev.target);
+        // var axis = ev.target;
+        //   var cellWidth = axis.pixelWidth / (axis.endIndex - axis.startIndex);
+        //   if (cellWidth < axis.renderer.labels.template.maxWidth) {
+        //     axis.renderer.labels.template.rotation = -45;
+        //     axis.renderer.labels.template.horizontalCenter = "right";
+        //     axis.renderer.labels.template.verticalCenter = "middle";
+        //   }
+        //   else {
+        //     axis.renderer.labels.template.rotation = 0;
+        //     axis.renderer.labels.template.horizontalCenter = "middle";
+        //     axis.renderer.labels.template.verticalCenter = "top";
+        //   }
+        // });
+      }); // end am4core.ready()
+
+    </script>
+  </head>
+  <body>
+    <header class="sticky">
+      <div id="menuToggle">
+
+        <input type="checkbox" />
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+        <ul id="menu">
+          <a href="/"><li>Home</li></a>
+          <a href="about"><li>About</li></a>
+          <a href="resources"><li>Resources</li></a>
+          <a href="mailto:contact@uspsimpact2020.com" class="email"><li>Contact</li></a>
+        </ul>
+      </div>
+      <span class="tooltip">
+<a class="title" onclick="copyToClipboard()" onmouseout="outFunc()"><span class="tooltiptext" id="myTooltip">Copy URL</span>USPS impact</a></span>
+<a href="support" id="support">Contribute</a>
+    </header>
+    <section class="container map">
+      <h1>USPS Sorting Machines Scheduled For Removal 2020</h1>
+      <h4>(Click on your State to see which Counties are impacted)</h4>
+      <div id="map" class=""></div>
+      *Map of 2016 Presidential results with number of machines scheduled for removal overlaid on top.<br>
+      **for full details on methodology see the about page.
+    </section>
+
+    <section class="container big">
+      <span class="container small">
+        <h1>Counties Impacted</h1>
+        <div class="piechart" id="piechartdiv"></div>
+        <div class="legend" id="legenddiv"></div>
+      </span>
+      <span class="container small">
+        <h1>Votes Impacted</h1>
+        <div class="piechart" id="piechartdiv2"></div>
+        <div class="legend" id="legenddiv2"></div>
+      </span>
+      <span class="container small">
+        <h1>Distribution of Removal by Party Preference</h1>
+        <div class="piechart" id="piechartdiv3"></div>
+        <div class="legend" id="legenddiv3"></div>
+      </span>
+    </section>
+
+    <br>
+
+    <section class="container swingStatesBarGraph">
+      <h1>Traditional Swing States Impacted</h1>
+      <div id="swingStatesBarGraph"></div>
+      <div class="container" style="height: 300px; padding: 0;">
+        <h1>Distribution of Total Removed From Swing States</h1>
+        <div class="piechart" id="piechartdiv4"></div>
+      </div>
+    </section>
+    
+    <h1>State and County Breakdown Based on 2016 Presidential Election Results</h1>
+    <!-- <table style="display: none;"> -->
+    <section class="container table">
+      <div class="tableHeader">
+        <span class="stateEl">State</span>
+        <span class="stateEl">Machines Scheduled for Removal</span>
+        <span class="stateEl">% Removed from Democratic Counties</span>
+        <span class="stateEl">% Removed from Republican Counties</span>
+        <span class="stateEl hide">Trump</span>
+        <span class="stateEl hide">Clinton</span>
+      </div>
+
+        <!-- State data -->
+      <button type="button" class="collapsible">
+        <span class="stateEl">Alabama</span>
+        <span class="stateEl">10</span>
+        <span class="stateEl demPercent">80%</span>
+        <span class="stateEl repPercent">20%</span>
+        <span class="stateEl hide">350,797</span>
+        <span class="stateEl hide">353,407</span>
+      </button>
+      <div class="content">
+          <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+          <div class="stateRow" style="background-color:#1a80c4;"><span>  Jefferson </span><span> 5 </span><span> Democrat  </span><span class="hide"> 134,768 </span><span class="hide"> 156,873 </span></div>
+          <div class="stateRow" style="background-color:#cc3d3d;"><span>  Madison </span><span> 1 </span><span> Republican  </span><span class="hide"> 89,520  </span><span class="hide"> 62,822  </span></div>
+          <div class="stateRow" style="background-color:#cc3d3d;"><span>  Mobile  </span><span> 1 </span><span> Republican  </span><span class="hide"> 95,116  </span><span class="hide"> 72,186  </span></div>
+          <div class="stateRow" style="background-color:#1a80c4;"><span>  Montgomery  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 34,003  </span><span class="hide"> 58,916  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Arkansas</span>
+        <span class="stateEl">5</span>
+        <span class="stateEl demPercent">80%</span>
+        <span class="stateEl repPercent">20%</span>
+        <span class="stateEl hide">122,940</span>
+        <span class="stateEl hide">102,733</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Pulaski </span><span> 4 </span><span> Democrat  </span><span class="hide"> 61,257  </span><span class="hide"> 89,574  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Washington  </span><span> 1 </span><span> Republican  </span><span class="hide"> 41,476  </span><span class="hide"> 33,366  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Arizona</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">25%</span>
+        <span class="stateEl repPercent">75%</span>
+        <span class="stateEl hide">927,568</span>
+        <span class="stateEl hide">914,789</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Maricopa  </span><span> 3 </span><span> Republican  </span><span class="hide"> 747,361 </span><span class="hide"> 702,907 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Pima  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 167,428 </span><span class="hide"> 224,661 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">California</span>
+        <span class="stateEl">76</span>
+        <span class="stateEl demPercent">97%</span>
+        <span class="stateEl repPercent">3%</span>
+        <span class="stateEl hide">6,588,228</span>
+        <span class="stateEl hide">3,064,722</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Alameda </span><span> 4 </span><span> Democrat  </span><span class="hide"> 95,922  </span><span class="hide"> 514,842 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Kern  </span><span> 2 </span><span> Republican  </span><span class="hide"> 129,584 </span><span class="hide"> 98,689  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Los Angeles </span><span> 20  </span><span> Democrat  </span><span class="hide"> 769,743 </span><span class="hide"> 2,464,364 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Orange  </span><span> 8 </span><span> Democrat  </span><span class="hide"> 507,148 </span><span class="hide"> 609,961 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Riverside </span><span> 5 </span><span> Democrat  </span><span class="hide"> 333,243 </span><span class="hide"> 373,695 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Sacramento  </span><span> 9 </span><span> Democrat  </span><span class="hide"> 189,789 </span><span class="hide"> 326,023 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  San Bernardino  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 271,240 </span><span class="hide"> 340,833 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  San Diego </span><span> 4 </span><span> Democrat  </span><span class="hide"> 477,766 </span><span class="hide"> 735,476 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  San Francisco </span><span> 9 </span><span> Democrat  </span><span class="hide"> 37,688  </span><span class="hide"> 345,084 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Santa Barbara </span><span> 3 </span><span> Democrat  </span><span class="hide"> 56,365  </span><span class="hide"> 107,142 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Santa Clara </span><span> 9 </span><span> Democrat  </span><span class="hide"> 144,826 </span><span class="hide"> 511,684 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Sonoma  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 51,408  </span><span class="hide"> 160,435 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Colorado</span>
+        <span class="stateEl">6</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">244,551</span>
+        <span class="stateEl hide">62,690</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Denver  </span><span> 6 </span><span> Democrat  </span><span class="hide"> 62,690  </span><span class="hide"> 244,551 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Connecticut</span>
+        <span class="stateEl">9</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">66,308</span>
+        <span class="stateEl hide">7,071</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hartford  </span><span> 7 </span><span> Democrat  </span><span class="hide"> 2,531 </span><span class="hide"> 30,375  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  New Haven </span><span> 2 </span><span> Democrat  </span><span class="hide"> 4,540 </span><span class="hide"> 35,933  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Washington DC</span>
+        <span class="stateEl">3</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">282,830</span>
+        <span class="stateEl hide">12,723</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  District of Columbia  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 12,723  </span><span class="hide"> 282,830 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Delaware</span>
+        <span class="stateEl">6</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">162,919</span>
+        <span class="stateEl hide">85,525</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  New Castle  </span><span> 6 </span><span> Democrat  </span><span class="hide"> 85,525  </span><span class="hide"> 162,919 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Florida</span>
+        <span class="stateEl">59</span>
+        <span class="stateEl demPercent">51%</span>
+        <span class="stateEl repPercent">49%</span>
+        <span class="stateEl hide">2,565,630</span>
+        <span class="stateEl hide">2,070,035</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Alachua </span><span> 1 </span><span> Democrat  </span><span class="hide"> 46,834  </span><span class="hide"> 75,820  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Charlotte </span><span> 6 </span><span> Republican  </span><span class="hide"> 60,218  </span><span class="hide"> 33,445  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Duval </span><span> 8 </span><span> Republican  </span><span class="hide"> 211,672 </span><span class="hide"> 205,704 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Escambia  </span><span> 2 </span><span> Republican  </span><span class="hide"> 88,808  </span><span class="hide"> 57,461  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hillsborough  </span><span> 8 </span><span> Democrat  </span><span class="hide"> 266,870 </span><span class="hide"> 307,896 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Lee </span><span> 6 </span><span> Republican  </span><span class="hide"> 191,551 </span><span class="hide"> 124,908 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Leon  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 53,821  </span><span class="hide"> 92,068  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Miami-Dade  </span><span> 7 </span><span> Democrat  </span><span class="hide"> 333,999 </span><span class="hide"> 624,146 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Orange  </span><span> 7 </span><span> Democrat  </span><span class="hide"> 195,216 </span><span class="hide"> 329,894 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Palm Beach  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 272,402 </span><span class="hide"> 374,673 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Pinellas  </span><span> 2 </span><span> Republican  </span><span class="hide"> 239,201 </span><span class="hide"> 233,701 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Seminole  </span><span> 5 </span><span> Republican  </span><span class="hide"> 109,443 </span><span class="hide"> 105,914 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Georgia</span>
+        <span class="stateEl">11</span>
+        <span class="stateEl demPercent">82%</span>
+        <span class="stateEl repPercent">18%</span>
+        <span class="stateEl hide">572,089</span>
+        <span class="stateEl hide">348,324</span>
+      </button>
+        <div class="content">
+          <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Bibb  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 24,043  </span><span class="hide"> 36,787  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Fayette </span><span> 2 </span><span> Republican  </span><span class="hide"> 35,048  </span><span class="hide"> 23,284  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Fulton  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 117,783 </span><span class="hide"> 297,051 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Gwinnett  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 146,989 </span><span class="hide"> 166,153 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Richmond  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 24,461  </span><span class="hide"> 48,814  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Hawaii</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">175,696</span>
+        <span class="stateEl hide">90,326</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Honolulu  </span><span> 4 </span><span> Democrat  </span><span class="hide"> 90,326  </span><span class="hide"> 175,696 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Iowa</span>
+        <span class="stateEl">3</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">178,739</span>
+        <span class="stateEl hide">141,882</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Linn  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 48,390  </span><span class="hide"> 58,935  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Polk  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 93,492  </span><span class="hide"> 119,804 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Idaho</span>
+        <span class="stateEl">1</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">75,677</span>
+        <span class="stateEl hide">93,752</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Ada </span><span> 1 </span><span> Republican  </span><span class="hide"> 93,752  </span><span class="hide"> 75,677  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Illinois</span>
+        <span class="stateEl">30</span>
+        <span class="stateEl demPercent">97%</span>
+        <span class="stateEl repPercent">3%</span>
+        <span class="stateEl hide">2,001,970</span>
+        <span class="stateEl hide">765,645</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Champaign </span><span> 1 </span><span> Democrat  </span><span class="hide"> 33,368  </span><span class="hide"> 50,137  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Cook  </span><span> 20  </span><span> Democrat  </span><span class="hide"> 453,287 </span><span class="hide"> 1,611,946 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  DuPage  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 166,415 </span><span class="hide"> 228,622 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Peoria  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 35,633  </span><span class="hide"> 38,060  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Rock Island </span><span> 1 </span><span> Democrat  </span><span class="hide"> 26,998  </span><span class="hide"> 32,298  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Sangamon  </span><span> 1 </span><span> Republican  </span><span class="hide"> 49,944  </span><span class="hide"> 40,907  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Indiana</span>
+        <span class="stateEl">13</span>
+        <span class="stateEl demPercent">62%</span>
+        <span class="stateEl repPercent">38%</span>
+        <span class="stateEl hide">465,998</span>
+        <span class="stateEl hide">382,432</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Allen </span><span> 3 </span><span> Republican  </span><span class="hide"> 83,930  </span><span class="hide"> 55,382  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Lake  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 75,625  </span><span class="hide"> 116,935 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Marion  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 130,360 </span><span class="hide"> 212,899 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  St. Joseph  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 52,021  </span><span class="hide"> 52,252  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Vanderburgh </span><span> 2 </span><span> Republican  </span><span class="hide"> 40,496  </span><span class="hide"> 28,530  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Kansas</span>
+        <span class="stateEl">1</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">69,627</span>
+        <span class="stateEl hide">104,353</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Sedgwick  </span><span> 1 </span><span> Republican  </span><span class="hide"> 104,353 </span><span class="hide"> 69,627  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Kentucky</span>
+        <span class="stateEl">7</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">260,614</span>
+        <span class="stateEl hide">200,662</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Fayette </span><span> 3 </span><span> Democrat  </span><span class="hide"> 56,894  </span><span class="hide"> 69,778  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Jefferson </span><span> 4 </span><span> Democrat  </span><span class="hide"> 143,768 </span><span class="hide"> 190,836 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Louisiana</span>
+        <span class="stateEl">10</span>
+        <span class="stateEl demPercent">90%</span>
+        <span class="stateEl repPercent">10%</span>
+        <span class="stateEl hide">323,033</span>
+        <span class="stateEl hide">226,153</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Caddo </span><span> 2 </span><span> Democrat  </span><span class="hide"> 49,006  </span><span class="hide"> 53,483  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  East Baton Rouge  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 84,660  </span><span class="hide"> 102,828 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Lafayette </span><span> 1 </span><span> Republican  </span><span class="hide"> 68,195  </span><span class="hide"> 32,726  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Orleans </span><span> 5 </span><span> Democrat  </span><span class="hide"> 24,292  </span><span class="hide"> 133,996 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Massachusetts</span>
+        <span class="stateEl">18</span>
+        <span class="stateEl demPercent">89%</span>
+        <span class="stateEl repPercent">11%</span>
+        <span class="stateEl hide">285,250</span>
+        <span class="stateEl hide">75,759</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Boston  </span><span> 9 </span><span> Democrat  </span><span class="hide"> 38,087  </span><span class="hide"> 221,093 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Hampden </span><span> 2 </span><span> Republican  </span><span class="hide"> 1,645 </span><span class="hide"> 1,188 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  North Reading </span><span> 1 </span><span> Democrat  </span><span class="hide"> 3,986 </span><span class="hide"> 4,283 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Plymouth  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 14,309  </span><span class="hide"> 15,602  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Worcester </span><span> 3 </span><span> Democrat  </span><span class="hide"> 17,732  </span><span class="hide"> 43,084  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Maryland</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">75%</span>
+        <span class="stateEl repPercent">25%</span>
+        <span class="stateEl hide">928,951</span>
+        <span class="stateEl hide">285,716</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Baltimore </span><span> 1 </span><span> Democrat  </span><span class="hide"> 149,477 </span><span class="hide"> 218,412 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Montgomery  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 92,704  </span><span class="hide"> 357,837 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Prince George's </span><span> 1 </span><span> Democrat  </span><span class="hide"> 32,811  </span><span class="hide"> 344,049 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Talbot  </span><span> 1 </span><span> Republican  </span><span class="hide"> 10,724  </span><span class="hide"> 8,653 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Maine</span>
+        <span class="stateEl">3</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">3,629</span>
+        <span class="stateEl hide">2,034</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Cumberland  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 1,755 </span><span class="hide"> 3,184 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Penobscot </span><span> 1 </span><span> Democrat  </span><span class="hide"> 279 </span><span class="hide"> 445 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Michigan</span>
+        <span class="stateEl">26</span>
+        <span class="stateEl demPercent">62%</span>
+        <span class="stateEl repPercent">38%</span>
+        <span class="stateEl hide">1,101,272</span>
+        <span class="stateEl hide">737,657</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Grand Traverse  </span><span> 3 </span><span> Republican  </span><span class="hide"> 27,413  </span><span class="hide"> 20,965  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Ingham  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 43,868  </span><span class="hide"> 79,110  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Kent  </span><span> 7 </span><span> Republican  </span><span class="hide"> 148,180 </span><span class="hide"> 138,683 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Oakland </span><span> 12  </span><span> Democrat  </span><span class="hide"> 289,203 </span><span class="hide"> 343,070 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Wayne </span><span> 3 </span><span> Democrat  </span><span class="hide"> 228,993 </span><span class="hide"> 519,444 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Minnesota</span>
+        <span class="stateEl">8</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">607,026</span>
+        <span class="stateEl hide">262,664</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hennepin  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 191,770 </span><span class="hide"> 429,288 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Ramsey  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 70,894  </span><span class="hide"> 177,738 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Missouri</span>
+        <span class="stateEl">14</span>
+        <span class="stateEl demPercent">79%</span>
+        <span class="stateEl repPercent">21%</span>
+        <span class="stateEl hide">548,021</span>
+        <span class="stateEl hide">459,897</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Boone </span><span> 1 </span><span> Democrat  </span><span class="hide"> 36,200  </span><span class="hide"> 41,125  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Cape Girardeau  </span><span> 1 </span><span> Republican  </span><span class="hide"> 27,017  </span><span class="hide"> 8,492 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Greene  </span><span> 2 </span><span> Republican  </span><span class="hide"> 78,035  </span><span class="hide"> 42,728  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Jackson </span><span> 4 </span><span> Democrat  </span><span class="hide"> 116,211 </span><span class="hide"> 168,972 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Saint Louis </span><span> 6 </span><span> Democrat  </span><span class="hide"> 202,434 </span><span class="hide"> 286,704 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Mississippi</span>
+        <span class="stateEl">7</span>
+        <span class="stateEl demPercent">43%</span>
+        <span class="stateEl repPercent">57%</span>
+        <span class="stateEl hide">104,903</span>
+        <span class="stateEl hide">87,060</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Forrest </span><span> 1 </span><span> Republican  </span><span class="hide"> 15,461  </span><span class="hide"> 11,716  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Grenada </span><span> 1 </span><span> Republican  </span><span class="hide"> 5,970 </span><span class="hide"> 4,424 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Harrison  </span><span> 2 </span><span> Republican  </span><span class="hide"> 40,354  </span><span class="hide"> 21,169  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hinds </span><span> 3 </span><span> Democrat  </span><span class="hide"> 25,275  </span><span class="hide"> 67,594  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Montana</span>
+        <span class="stateEl">1</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">22,171</span>
+        <span class="stateEl hide">40,920</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Yellowstone </span><span> 1 </span><span> Republican  </span><span class="hide"> 40,920  </span><span class="hide"> 22,171  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">North Carolina</span>
+        <span class="stateEl">15</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">818,151</span>
+        <span class="stateEl hide">500,927</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Cumberland  </span><span> 4 </span><span> Democrat  </span><span class="hide"> 51,265  </span><span class="hide"> 71,605  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Guilford  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 98,062  </span><span class="hide"> 149,248 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Mecklenburg </span><span> 5 </span><span> Democrat  </span><span class="hide"> 155,518 </span><span class="hide"> 294,562 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Wake  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 196,082 </span><span class="hide"> 302,736 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">North Dakota</span>
+        <span class="stateEl">3</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">37,167</span>
+        <span class="stateEl hide">58,452</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Cass  </span><span> 1 </span><span> Republican  </span><span class="hide"> 39,816  </span><span class="hide"> 31,361  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Ward  </span><span> 2 </span><span> Republican  </span><span class="hide"> 18,636  </span><span class="hide"> 5,806 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Nebraska</span>
+        <span class="stateEl">2</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">113,798</span>
+        <span class="stateEl hide">108,077</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Douglas </span><span> 2 </span><span> Democrat  </span><span class="hide"> 108,077 </span><span class="hide"> 113,798 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">New Hampshire</span>
+        <span class="stateEl">5</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">1,198</span>
+        <span class="stateEl hide">1,588</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Hillsborough  </span><span> 5 </span><span> Republican  </span><span class="hide"> 1,588 </span><span class="hide"> 1,198 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">New Jersey</span>
+        <span class="stateEl">21</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">646,620</span>
+        <span class="stateEl hide">343,396</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Bergen  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 175,529 </span><span class="hide"> 231,211 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Camden  </span><span> 7 </span><span> Democrat  </span><span class="hide"> 72,631  </span><span class="hide"> 146,717 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hudson  </span><span> 7 </span><span> Democrat  </span><span class="hide"> 49,043  </span><span class="hide"> 163,917 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Mercer  </span><span> 4 </span><span> Democrat  </span><span class="hide"> 46,193  </span><span class="hide"> 104,775 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">New Mexico</span>
+        <span class="stateEl">1</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">143,417</span>
+        <span class="stateEl hide">94,698</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Bernalillo  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 94,698  </span><span class="hide"> 143,417 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Nevada</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">499,606</span>
+        <span class="stateEl hide">414,815</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Clark </span><span> 3 </span><span> Democrat  </span><span class="hide"> 320,057 </span><span class="hide"> 402,227 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Washoe  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 94,758  </span><span class="hide"> 97,379  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">New York</span>
+        <span class="stateEl">52</span>
+        <span class="stateEl demPercent">90%</span>
+        <span class="stateEl repPercent">10%</span>
+        <span class="stateEl hide">2,734,544</span>
+        <span class="stateEl hide">1,597,207</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Albany  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 47,810  </span><span class="hide"> 83,077  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Brooklyn  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 141,044 </span><span class="hide"> 640,553 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Erie  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 188,303 </span><span class="hide"> 215,456 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Monroe  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 136,582 </span><span class="hide"> 188,592 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Nassau  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 292,025 </span><span class="hide"> 332,154 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Onondaga  </span><span> 6 </span><span> Democrat  </span><span class="hide"> 83,649  </span><span class="hide"> 112,337 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Orange  </span><span> 1 </span><span> Republican  </span><span class="hide"> 76,645  </span><span class="hide"> 68,278  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Queens  </span><span> 10  </span><span> Democrat  </span><span class="hide"> 149,341 </span><span class="hide"> 517,220 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Suffolk </span><span> 4 </span><span> Republican  </span><span class="hide"> 350,570 </span><span class="hide"> 303,951 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Westchester </span><span> 9 </span><span> Democrat  </span><span class="hide"> 131,238 </span><span class="hide"> 272,926 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Ohio</span>
+        <span class="stateEl">34</span>
+        <span class="stateEl demPercent">91%</span>
+        <span class="stateEl repPercent">9%</span>
+        <span class="stateEl hide">1,255,418</span>
+        <span class="stateEl hide">810,430</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Cuyahoga  </span><span> 8 </span><span> Democrat  </span><span class="hide"> 184,211 </span><span class="hide"> 398,271 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Franklin  </span><span> 10  </span><span> Democrat  </span><span class="hide"> 199,331 </span><span class="hide"> 351,198 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hamilton  </span><span> 8 </span><span> Democrat  </span><span class="hide"> 173,665 </span><span class="hide"> 215,719 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Lucas </span><span> 3 </span><span> Democrat  </span><span class="hide"> 75,698  </span><span class="hide"> 110,833 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Mahoning  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 53,616  </span><span class="hide"> 57,381  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Montgomery  </span><span> 3 </span><span> Republican  </span><span class="hide"> 123,909 </span><span class="hide"> 122,016 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Oklahoma</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">200,660</span>
+        <span class="stateEl hide">285,827</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Oklahoma  </span><span> 2 </span><span> Republican  </span><span class="hide"> 141,569 </span><span class="hide"> 112,813 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Tulsa </span><span> 2 </span><span> Republican  </span><span class="hide"> 144,258 </span><span class="hide"> 87,847  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Oregon</span>
+        <span class="stateEl">6</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">395,314</span>
+        <span class="stateEl hide">135,095</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Lane  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 67,141  </span><span class="hide"> 102,753 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Multnomah </span><span> 4 </span><span> Democrat  </span><span class="hide"> 67,954  </span><span class="hide"> 292,561 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Pennsylvania</span>
+        <span class="stateEl">30</span>
+        <span class="stateEl demPercent">87%</span>
+        <span class="stateEl repPercent">13%</span>
+        <span class="stateEl hide">1,326,328</span>
+        <span class="stateEl hide">783,298</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Allegheny </span><span> 4 </span><span> Democrat  </span><span class="hide"> 259,480 </span><span class="hide"> 367,617 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Blair </span><span> 1 </span><span> Republican  </span><span class="hide"> 39,135  </span><span class="hide"> 13,958  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Bucks </span><span> 4 </span><span> Democrat  </span><span class="hide"> 164,361 </span><span class="hide"> 167,060 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Cambria </span><span> 1 </span><span> Republican  </span><span class="hide"> 42,258  </span><span class="hide"> 18,867  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Dauphin </span><span> 5 </span><span> Democrat  </span><span class="hide"> 60,863  </span><span class="hide"> 64,706  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Erie  </span><span> 2 </span><span> Republican  </span><span class="hide"> 60,069  </span><span class="hide"> 58,112  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Lackawanna  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 48,384  </span><span class="hide"> 51,983  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Philadelphia  </span><span> 10  </span><span> Democrat  </span><span class="hide"> 108,748 </span><span class="hide"> 584,025 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Rhode Island</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">45,690</span>
+        <span class="stateEl hide">7,735</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Providence  </span><span> 4 </span><span> Democrat  </span><span class="hide"> 7,735 </span><span class="hide"> 45,690  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">South Carolina</span>
+        <span class="stateEl">9</span>
+        <span class="stateEl demPercent">67%</span>
+        <span class="stateEl repPercent">33%</span>
+        <span class="stateEl hide">271,782</span>
+        <span class="stateEl hide">255,744</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Charleston  </span><span> 2 </span><span> Democrat  </span><span class="hide"> 75,443  </span><span class="hide"> 89,299  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Greenville  </span><span> 3 </span><span> Republican  </span><span class="hide"> 127,832 </span><span class="hide"> 74,483  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Richland  </span><span> 4 </span><span> Democrat  </span><span class="hide"> 52,469  </span><span class="hide"> 108,000 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">South Dakota</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">32,522</span>
+        <span class="stateEl hide">46,498</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Beadle  </span><span> 1 </span><span> Republican  </span><span class="hide"> 4,455 </span><span class="hide"> 1,912 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Minnehaha </span><span> 3 </span><span> Republican  </span><span class="hide"> 42,043  </span><span class="hide"> 30,610  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Tennessee</span>
+        <span class="stateEl">28</span>
+        <span class="stateEl demPercent">57%</span>
+        <span class="stateEl repPercent">43%</span>
+        <span class="stateEl hide">489,074</span>
+        <span class="stateEl hide">419,646</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Davidson  </span><span> 8 </span><span> Democrat  </span><span class="hide"> 84,550  </span><span class="hide"> 148,864 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Hamilton  </span><span> 5 </span><span> Republican  </span><span class="hide"> 78,733  </span><span class="hide"> 55,316  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Knox  </span><span> 5 </span><span> Republican  </span><span class="hide"> 105,767 </span><span class="hide"> 62,878  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Shelby  </span><span> 8 </span><span> Democrat  </span><span class="hide"> 116,344 </span><span class="hide"> 208,992 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Washington  </span><span> 2 </span><span> Republican  </span><span class="hide"> 34,252  </span><span class="hide"> 13,024  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Texas</span>
+        <span class="stateEl">58</span>
+        <span class="stateEl demPercent">74%</span>
+        <span class="stateEl repPercent">26%</span>
+        <span class="stateEl hide">2,499,279</span>
+        <span class="stateEl hide">1,875,649</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Bexar </span><span> 8 </span><span> Democrat  </span><span class="hide"> 240,333 </span><span class="hide"> 319,550 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Dallas  </span><span> 12  </span><span> Democrat  </span><span class="hide"> 262,945 </span><span class="hide"> 461,080 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  El Paso </span><span> 2 </span><span> Democrat  </span><span class="hide"> 55,512  </span><span class="hide"> 147,843 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Harris  </span><span> 14  </span><span> Democrat  </span><span class="hide"> 545,955 </span><span class="hide"> 707,914 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Hidalgo </span><span> 1 </span><span> Democrat  </span><span class="hide"> 48,642  </span><span class="hide"> 118,809 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Jefferson </span><span> 2 </span><span> Republican  </span><span class="hide"> 42,862  </span><span class="hide"> 42,443  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Lubbock </span><span> 1 </span><span> Republican  </span><span class="hide"> 65,651  </span><span class="hide"> 28,023  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Midland </span><span> 1 </span><span> Republican  </span><span class="hide"> 36,973  </span><span class="hide"> 10,025  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Nueces  </span><span> 1 </span><span> Republican  </span><span class="hide"> 50,766  </span><span class="hide"> 49,198  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Potter  </span><span> 1 </span><span> Republican  </span><span class="hide"> 19,630  </span><span class="hide"> 7,657 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Tarrant </span><span> 8 </span><span> Republican  </span><span class="hide"> 345,921 </span><span class="hide"> 288,392 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Taylor  </span><span> 1 </span><span> Republican  </span><span class="hide"> 33,250  </span><span class="hide"> 10,085  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Travis  </span><span> 6 </span><span> Democrat  </span><span class="hide"> 127,209 </span><span class="hide"> 308,260 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Utah</span>
+        <span class="stateEl">3</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">175,863</span>
+        <span class="stateEl hide">138,043</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Salt Lake  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 138,043 </span><span class="hide"> 175,863 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Virginia</span>
+        <span class="stateEl">12</span>
+        <span class="stateEl demPercent">42%</span>
+        <span class="stateEl repPercent">58%</span>
+        <span class="stateEl hide">531,498</span>
+        <span class="stateEl hide">282,832</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Fairfax </span><span> 1 </span><span> Democrat  </span><span class="hide"> 157,710 </span><span class="hide"> 355,133 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Loudoun </span><span> 2 </span><span> Democrat  </span><span class="hide"> 69,949  </span><span class="hide"> 100,795 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Norfolk </span><span> 2 </span><span> Democrat  </span><span class="hide"> 21,552  </span><span class="hide"> 57,023  </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Richmond  </span><span> 4 </span><span> Republican  </span><span class="hide"> 2,213 </span><span class="hide"> 1,347 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Roanoke </span><span> 3 </span><span> Republican  </span><span class="hide"> 31,408  </span><span class="hide"> 17,200  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Vermont</span>
+        <span class="stateEl">1</span>
+        <span class="stateEl demPercent">100%</span>
+        <span class="stateEl repPercent">0%</span>
+        <span class="stateEl hide">964</span>
+        <span class="stateEl hide">462</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Windsor </span><span> 1 </span><span> Democrat  </span><span class="hide"> 462 </span><span class="hide"> 964 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Washington</span>
+        <span class="stateEl">8</span>
+        <span class="stateEl demPercent">75%</span>
+        <span class="stateEl repPercent">25%</span>
+        <span class="stateEl hide">984,627</span>
+        <span class="stateEl hide">476,598</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  King  </span><span> 5 </span><span> Democrat  </span><span class="hide"> 216,339 </span><span class="hide"> 718,322 </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Pierce  </span><span> 1 </span><span> Democrat  </span><span class="hide"> 146,824 </span><span class="hide"> 172,538 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Spokane </span><span> 2 </span><span> Republican  </span><span class="hide"> 113,435 </span><span class="hide"> 93,767  </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Wisconsin</span>
+        <span class="stateEl">12</span>
+        <span class="stateEl demPercent">75%</span>
+        <span class="stateEl repPercent">25%</span>
+        <span class="stateEl hide">586,382</span>
+        <span class="stateEl hide">303,568</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Brown </span><span> 2 </span><span> Republican  </span><span class="hide"> 67,210  </span><span class="hide"> 53,382  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Dane  </span><span> 3 </span><span> Democrat  </span><span class="hide"> 71,275  </span><span class="hide"> 217,697 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Marathon  </span><span> 1 </span><span> Republican  </span><span class="hide"> 39,014  </span><span class="hide"> 26,481  </span></div>
+        <div class="stateRow" style="background-color:#1a80c4;"><span>  Milwaukee </span><span> 6 </span><span> Democrat  </span><span class="hide"> 126,069 </span><span class="hide"> 288,822 </span></div>
+      </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">West Virginia</span>
+        <span class="stateEl">4</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">28,263</span>
+        <span class="stateEl hide">43,850</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Kanawha </span><span> 4 </span><span> Republican  </span><span class="hide"> 43,850  </span><span class="hide"> 28,263  </span></div>
+                </div>
+
+      <button type="button" class="collapsible">
+        <span class="stateEl">Wyoming</span>
+        <span class="stateEl">3</span>
+        <span class="stateEl demPercent">0%</span>
+        <span class="stateEl repPercent">100%</span>
+        <span class="stateEl hide">9,808</span>
+        <span class="stateEl hide">35,706</span>
+      </button>
+      <div class="content">
+        <div class="stateRow" style="color:#3c3c3c;"><span>County</span><span>Machines Schedule<br>for Removal</span><span>2016 Political Preference</span><span class="hide">Voted Trump</span><span class="hide">Voted Clinton</span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Natrona </span><span> 1 </span><span> Republican  </span><span class="hide"> 23,552  </span><span class="hide"> 6,577 </span></div>
+        <div class="stateRow" style="background-color:#cc3d3d;"><span>  Sweetwater  </span><span> 2 </span><span> Republican  </span><span class="hide"> 12,154  </span><span class="hide"> 3,231 </span></div>
+      </div>
+    </section>
+
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");
+        });
+      }
+
+      function copyToClipboard() {
+        navigator.clipboard.writeText("https://uspsimpact2020.com/").then(function() {
+        var tooltip = document.getElementById("myTooltip");
+        tooltip.innerHTML = "Copied!";
+        });
+      }
+
+
+      function outFunc() {
+        var tooltip = document.getElementById("myTooltip");
+        tooltip.innerHTML = "Copy URL";
+      }
+    </script>
+  </body>
+</html>
